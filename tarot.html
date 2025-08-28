@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>랜덤 타로 뽑기 | 버터베러</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #0b1020;
+      color: #fff;
+      font-family: 'Noto Sans KR', sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+    #card-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      padding: 20px;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .tarot-card {
+      width: 100%;
+      aspect-ratio: 7 / 12;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .tarot-card:hover {
+      transform: scale(1.05);
+    }
+    #result-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.8);
+      color: #fff;
+      z-index: 20;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+    }
+    #result-modal img {
+      max-width: 200px;
+      margin-bottom: 20px;
+    }
+    #result-title {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+    }
+    #result-message {
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+    #buy-btn {
+      background: #ffe066;
+      color: #000;
+      padding: 10px 20px;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+    @media (max-width: 600px) {
+      #card-container {
+        max-width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>🔮 마음이 가는 타로카드를 선택하세요</h1>
+  <div id="card-container"></div>
+
+  <div id="result-modal" class="modal">
+    <img id="result-image" src="" alt="Card">
+    <div id="result-title">카드 제목</div>
+    <div id="result-message">카드 메시지</div>
+    <button id="buy-btn" onclick="location.href='https://butterbetter.shop'">이 카드 구매하기</button>
+  </div>
+
+  <script>
+    const container = document.getElementById('card-container');
+    const cardBackImg = 'https://i.imgur.com/ocK7mpS.jpeg'; // 카드 뒷면 이미지 URL
+    const cardData = [
+      { title: 'The Sun ☀️', message: '오늘도 밝게 빛날 당신의 하루!', image: 'https://via.placeholder.com/200x300?text=The+Sun' },
+      { title: 'The Moon 🌙', message: '당신의 직관을 믿어보세요.', image: 'https://via.placeholder.com/200x300?text=The+Moon' },
+      { title: 'The Star ✨', message: '희망은 언제나 당신 곁에 있습니다.', image: 'https://via.placeholder.com/200x300?text=The+Star' },
+      { title: 'The Lovers 💕', message: '사랑과 연결의 기운이 함께합니다.', image: 'https://via.placeholder.com/200x300?text=Lovers' },
+      { title: 'The Magician 🪄', message: '무엇이든 시작할 수 있는 힘이 있어요.', image: 'https://via.placeholder.com/200x300?text=Magician' },
+      { title: 'The Hermit 🔦', message: '당신의 내면의 빛을 따라가세요.', image: 'https://via.placeholder.com/200x300?text=Hermit' },
+      { title: 'Temperance 🌈', message: '균형과 조화가 필요해요.', image: 'https://via.placeholder.com/200x300?text=Temperance' },
+      { title: 'Judgement 🎺', message: '변화의 순간, 다시 시작할 기회입니다.', image: 'https://via.placeholder.com/200x300?text=Judgement' },
+      { title: 'The Chariot 🛡️', message: '당신의 의지로 앞으로 나아가세요.', image: 'https://via.placeholder.com/200x300?text=Chariot' },
+      { title: 'The World 🌍', message: '모든 것이 하나로 연결되고 있어요.', image: 'https://via.placeholder.com/200x300?text=World' },
+      { title: 'Strength 🐯', message: '당신 안의 용기를 믿어보세요.', image: 'https://via.placeholder.com/200x300?text=Strength' },
+      { title: 'Justice ⚖️', message: '당신의 선택은 옳습니다.', image: 'https://via.placeholder.com/200x300?text=Justice' }
+    ];
+
+    const resultModal = document.getElementById('result-modal');
+    const resultImage = document.getElementById('result-image');
+    const resultTitle = document.getElementById('result-title');
+    const resultMessage = document.getElementById('result-message');
+
+    for (let i = 0; i < 12; i++) {
+      const card = document.createElement('img');
+      card.src = cardBackImg;
+      card.className = 'tarot-card';
+      card.onclick = function () {
+        const picked = cardData[Math.floor(Math.random() * cardData.length)];
+        resultImage.src = picked.image;
+        resultTitle.textContent = picked.title;
+        resultMessage.textContent = picked.message;
+        resultModal.style.display = 'flex';
+      };
+      container.appendChild(card);
+    }
+  </script>
+</body>
+</html>
