@@ -1,126 +1,191 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>전체 카드 의미 보기 | 버터베러</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>전체 타로카드 의미 보기 | 버터베러</title>
   <style>
     body {
+      margin: 0;
       background-color: #0b1020;
-      color: white;
+      color: #fff;
       font-family: 'Noto Sans KR', sans-serif;
       padding: 20px;
-      margin: 0;
       text-align: center;
     }
     h1 {
+      margin-bottom: 1rem;
       font-size: 1.8rem;
-      margin-bottom: 30px;
     }
     .card-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 20px;
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
     }
-    .card-item {
-      background-color: #1a1e33;
-      border-radius: 10px;
+    .card {
+      background: #1a1f30;
       padding: 10px;
-      transition: transform 0.3s;
+      border-radius: 8px;
       cursor: pointer;
+      transition: transform 0.2s;
     }
-    .card-item:hover {
-      transform: scale(1.05);
+    .card:hover {
+      transform: scale(1.03);
     }
-    .card-item img {
+    .card img {
       width: 100%;
-      border-radius: 6px;
+      border-radius: 4px;
     }
-    #modal {
+    .card-title {
+      margin-top: 8px;
+      font-size: 1rem;
+    }
+    .modal {
       display: none;
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
       background-color: rgba(0,0,0,0.8);
-      color: white;
+      color: #fff;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
       z-index: 100;
       padding: 20px;
     }
-    #modal img {
-      max-width: 200px;
-      margin-bottom: 20px;
+    .modal-content {
+      background: #1f263a;
+      border-radius: 10px;
+      max-width: 500px;
+      padding: 20px;
+      text-align: center;
     }
-    #modal-title {
-      font-size: 1.5rem;
+    .modal-content img {
+      width: 150px;
+      border-radius: 8px;
       margin-bottom: 10px;
     }
-    #modal-message {
-      font-size: 1rem;
+    .modal-content h2 {
+      margin-bottom: 10px;
+    }
+    .modal-content p {
       margin-bottom: 20px;
     }
-    .modal-buttons button {
+    .btn {
+      padding: 8px 16px;
       background: #ffe066;
       color: #000;
-      padding: 10px 20px;
-      margin: 5px;
       border: none;
-      font-size: 1rem;
+      border-radius: 6px;
       cursor: pointer;
-      border-radius: 8px;
+      font-weight: bold;
+    }
+    @media (max-width: 600px) {
+      .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
   </style>
 </head>
 <body>
-  <h1>🃏 전체 타로 카드 의미 보기</h1>
-  <div class="card-grid" id="card-grid"></div>
+  <h1>🃏 전체 타로카드 의미 보기</h1>
+  <div class="card-grid" id="cardGrid"></div>
 
-  <div id="modal">
-    <img id="modal-img" src="" alt="">
-    <div id="modal-title">카드 이름</div>
-    <div id="modal-message">카드 의미</div>
-    <div class="modal-buttons">
-      <button onclick="location.href='https://butterbetter.shop'">키링 구매하기</button>
-      <button onclick="closeModal()">뒤로가기</button>
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <img id="modalImage" src="" alt="">
+      <h2 id="modalTitle"></h2>
+      <p id="modalMessage"></p>
+      <button class="btn" onclick="location.href='https://butterbetter.shop'">이 카드 키링 구매하기</button>
+      <br /><br />
+      <button class="btn" onclick="closeModal()">닫기</button>
     </div>
   </div>
 
   <script>
-    const cardGrid = document.getElementById('card-grid');
-    const modal = document.getElementById('modal');
-    const modalImg = document.getElementById('modal-img');
-    const modalTitle = document.getElementById('modal-title');
-    const modalMessage = document.getElementById('modal-message');
-
     const cards = [
-      { title: 'The Sun ☀️', message: '오늘도 밝게 빛날 당신의 하루!', image: 'https://i.imgur.com/M8mQkZo.jpeg' },
-      { title: 'The Moon 🌙', message: '당신의 직관을 믿어보세요.', image: 'https://i.imgur.com/iblfhTE.jpeg' },
-      { title: 'The Star ✨', message: '희망은 언제나 당신 곁에 있습니다.', image: 'https://i.imgur.com/HzlHt4j.jpeg' },
-      { title: 'The Lovers 💕', message: '사랑과 연결의 기운이 함께합니다.', image: 'https://i.imgur.com/hS1gk9W.jpeg' },
-      { title: 'The Magician 🪄', message: '무엇이든 시작할 수 있는 힘이 있어요.', image: 'https://i.imgur.com/WU4dgbK.jpeg' },
-      { title: 'The Hermit 🔦', message: '당신의 내면의 빛을 따라가세요.', image: 'https://i.imgur.com/MkGArEw.jpeg' },
-      { title: 'Temperance 🌈', message: '균형과 조화가 필요해요.', image: 'https://i.imgur.com/JgsoRQ7.jpeg' },
-      { title: 'Judgement 🎺', message: '변화의 순간, 다시 시작할 기회입니다.', image: 'https://i.imgur.com/uq16BSC.jpeg' },
-      { title: 'The Chariot 🛡️', message: '당신의 의지로 앞으로 나아가세요.', image: 'https://i.imgur.com/gqyUj0m.jpeg' },
-      { title: 'The World 🌍', message: '모든 것이 하나로 연결되고 있어요.', image: 'https://i.imgur.com/kjitYcP.jpeg' },
-      { title: 'Strength 🐯', message: '당신 안의 용기를 믿어보세요.', image: 'https://i.imgur.com/Q0Vr21V.jpeg' },
-      { title: 'Justice ⚖️', message: '당신의 선택은 옳습니다.', image: 'https://i.imgur.com/wSgEvjF.jpeg' }
+      {
+        title: 'The Sun ☀️',
+        image: 'https://i.imgur.com/pIqWqrL.jpeg',
+        message: '오늘도 밝게 빛날 당신의 하루!'
+      },
+      {
+        title: 'The Moon 🌙',
+        image: 'https://i.imgur.com/ZlneLrh.jpeg',
+        message: '당신의 직관을 믿어보세요.'
+      },
+      {
+        title: 'The Star ✨',
+        image: 'https://i.imgur.com/Z7udZRe.jpeg',
+        message: '희망은 언제나 당신 곁에 있습니다.'
+      },
+      {
+        title: 'The Lovers 💕',
+        image: 'https://i.imgur.com/KFrOrla.jpeg',
+        message: '사랑과 연결의 기운이 함께합니다.'
+      },
+      {
+        title: 'The Magician 🪄',
+        image: 'https://i.imgur.com/4Ae3nhm.jpeg',
+        message: '무엇이든 시작할 수 있는 힘이 있어요.'
+      },
+      {
+        title: 'The Hermit 🔦',
+        image: 'https://i.imgur.com/rcNVoCk.jpeg',
+        message: '당신의 내면의 빛을 따라가세요.'
+      },
+      {
+        title: 'Temperance 🌈',
+        image: 'https://i.imgur.com/9tjxxg8.jpeg',
+        message: '균형과 조화가 필요해요.'
+      },
+      {
+        title: 'Judgement 🎺',
+        image: 'https://i.imgur.com/lRbYQtH.jpeg',
+        message: '변화의 순간, 다시 시작할 기회입니다.'
+      },
+      {
+        title: 'The Chariot 🛡️',
+        image: 'https://i.imgur.com/rUGm0Vi.jpeg',
+        message: '당신의 의지로 앞으로 나아가세요.'
+      },
+      {
+        title: 'The World 🌍',
+        image: 'https://i.imgur.com/rUGm0Vi.jpeg',
+        message: '모든 것이 하나로 연결되고 있어요.'
+      },
+      {
+        title: 'Strength 🐯',
+        image: 'https://i.imgur.com/GAVhkiD.jpeg',
+        message: '당신 안의 용기를 믿어보세요.'
+      },
+      {
+        title: 'Justice ⚖️',
+        image: 'https://i.imgur.com/bEs0bTD.jpeg',
+        message: '당신의 선택은 옳습니다.'
+      }
     ];
 
+    const grid = document.getElementById('cardGrid');
+    const modal = document.getElementById('modal');
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalMessage = document.getElementById('modalMessage');
+
     cards.forEach(card => {
-      const cardDiv = document.createElement('div');
-      cardDiv.className = 'card-item';
-      cardDiv.innerHTML = `<img src="${card.image}" alt="${card.title}">`;
-      cardDiv.onclick = () => {
-        modalImg.src = card.image;
+      const div = document.createElement('div');
+      div.className = 'card';
+      div.innerHTML = `
+        <img src="${card.image}" alt="${card.title}" />
+        <div class="card-title">${card.title}</div>
+      `;
+      div.onclick = () => {
+        modalImage.src = card.image;
         modalTitle.textContent = card.title;
         modalMessage.textContent = card.message;
         modal.style.display = 'flex';
       };
-      cardGrid.appendChild(cardDiv);
+      grid.appendChild(div);
     });
 
     function closeModal() {
