@@ -17,6 +17,16 @@
       margin-bottom: 1rem;
       font-size: 1.8rem;
     }
+    .btn-top {
+      margin-bottom: 1.5rem;
+      padding: 8px 16px;
+      background: #ffe066;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
     .card-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -79,6 +89,7 @@
       border-radius: 6px;
       cursor: pointer;
       font-weight: bold;
+      margin: 5px;
     }
     @media (max-width: 600px) {
       .card-grid {
@@ -88,7 +99,9 @@
   </style>
 </head>
 <body>
+  <button class="btn-top" onclick="window.location.href='index.html'">🔙 처음 화면으로 돌아가기</button>
   <h1>🃏 전체 타로카드 의미 보기</h1>
+
   <div class="card-grid" id="cardGrid"></div>
 
   <div class="modal" id="modal">
@@ -97,7 +110,6 @@
       <h2 id="modalTitle"></h2>
       <p id="modalMessage"></p>
       <button class="btn" onclick="location.href='https://butterbetter.shop'">이 카드 키링 구매하기</button>
-      <br /><br />
       <button class="btn" onclick="closeModal()">닫기</button>
     </div>
   </div>
@@ -161,7 +173,7 @@
       },
       {
         title: 'Justice ⚖️',
-        image: 'https://i.imgur.com/bEs0bTD.jpeg',
+        image: 'https://i.imgur.com/wSgEvjF.jpeg',
         message: '당신의 선택은 옳습니다.'
       }
     ];
