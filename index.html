@@ -48,9 +48,16 @@
       flex-direction: column;
       padding: 20px;
     }
-    #result-modal img {
-      max-width: 200px;
+    .modal-images {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
       margin-bottom: 20px;
+    }
+    .modal-images img {
+      max-width: 200px;
+      border-radius: 8px;
     }
     #result-title {
       font-size: 1.4rem;
@@ -100,8 +107,11 @@
   </button>
 
   <!-- 결과 모달 -->
-  <div id="result-modal" class="modal" style="display: none; flex-direction: column;">
-    <img id="result-image" src="" alt="Card">
+  <div id="result-modal" class="modal">
+    <div class="modal-images">
+      <img id="result-image" src="" alt="Card">
+      <img id="keyring-image" src="" alt="Keyring">
+    </div>
     <div id="result-title">카드 제목</div>
     <div id="result-message">카드 메시지</div>
     <button id="buy-btn" onclick="location.href='https://butterbetter.shop'">이 카드 구매하기</button>
@@ -110,34 +120,37 @@
 
   <script>
     const container = document.getElementById('card-container');
-    const cardBackImg = 'https://i.imgur.com/ocK7mpS.jpeg';
-    const cardData = [
-      { title: 'The Sun ☀️', message: '오늘도 밝게 빛날 당신의 하루!', image: 'https://i.imgur.com/M8mQkZo.jpeg' },
-      { title: 'The Moon 🌙', message: '당신의 직관을 믿어보세요.', image: 'https://i.imgur.com/iblfhTE.jpeg' },
-      { title: 'The Star ✨', message: '희망은 언제나 당신 곁에 있습니다.', image: 'https://i.imgur.com/HzlHt4j.jpeg' },
-      { title: 'The Lovers 💕', message: '사랑과 연결의 기운이 함께합니다.', image: 'https://i.imgur.com/hS1gk9W.jpeg' },
-      { title: 'The Magician 🪄', message: '무엇이든 시작할 수 있는 힘이 있어요.', image: 'https://i.imgur.com/WU4dgbK.jpeg' },
-      { title: 'The Hermit 🔦', message: '당신의 내면의 빛을 따라가세요.', image: 'https://i.imgur.com/MkGArEw.jpeg' },
-      { title: 'Temperance 🌈', message: '균형과 조화가 필요해요.', image: 'https://i.imgur.com/JgsoRQ7.jpeg' },
-      { title: 'Judgement 🎺', message: '변화의 순간, 다시 시작할 기회입니다.', image: 'https://i.imgur.com/uq16BSC.jpeg' },
-      { title: 'The Chariot 🛡️', message: '당신의 의지로 앞으로 나아가세요.', image: 'https://i.imgur.com/gqyUj0m.jpeg' },
-      { title: 'The World 🌍', message: '모든 것이 하나로 연결되고 있어요.', image: 'https://i.imgur.com/kjitYcP.jpeg' },
-      { title: 'Strength 🐯', message: '당신 안의 용기를 믿어보세요.', image: 'https://i.imgur.com/Q0Vr21V.jpeg' },
-      { title: 'Justice ⚖️', message: '당신의 선택은 옳습니다.', image: 'https://i.imgur.com/wSgEvjF.jpeg' }
-    ];
-
     const resultModal = document.getElementById('result-modal');
     const resultImage = document.getElementById('result-image');
+    const keyringImage = document.getElementById('keyring-image');
     const resultTitle = document.getElementById('result-title');
     const resultMessage = document.getElementById('result-message');
 
-    for (let i = 0; i < 12; i++) {
+    const cardBackImg = 'https://i.imgur.com/ocK7mpS.jpeg';
+
+    const cardData = [
+      { title: 'The Sun ☀️', message: '오늘도 밝게 빛날 당신의 하루!', image: 'https://i.imgur.com/M8mQkZo.jpeg', keyring: 'https://i.imgur.com/7ob6Koe.jpeg' },
+      { title: 'The Moon 🌙', message: '당신의 직관을 믿어보세요.', image: 'https://i.imgur.com/iblfhTE.jpeg', keyring: 'https://i.imgur.com/jYj6mHo.jpeg' },
+      { title: 'The Star ✨', message: '희망은 언제나 당신 곁에 있습니다.', image: 'https://i.imgur.com/HzlHt4j.jpeg', keyring: 'https://i.imgur.com/s9Lhfy6.jpeg' },
+      { title: 'The Lovers 💕', message: '사랑과 연결의 기운이 함께합니다.', image: 'https://i.imgur.com/hS1gk9W.jpeg', keyring: 'https://i.imgur.com/YXZx71B.jpeg' },
+      { title: 'The Magician 🪄', message: '무엇이든 시작할 수 있는 힘이 있어요.', image: 'https://i.imgur.com/WU4dgbK.jpeg', keyring: 'https://i.imgur.com/oZLIfv4.jpeg' },
+      { title: 'The Hermit 🔦', message: '당신의 내면의 빛을 따라가세요.', image: 'https://i.imgur.com/MkGArEw.jpeg', keyring: 'https://i.imgur.com/lF3kefz.jpeg' },
+      { title: 'Temperance 🌈', message: '균형과 조화가 필요해요.', image: 'https://i.imgur.com/JgsoRQ7.jpeg', keyring: 'https://i.imgur.com/EUHd9OD.jpeg' },
+      { title: 'Judgement 🎺', message: '변화의 순간, 다시 시작할 기회입니다.', image: 'https://i.imgur.com/uq16BSC.jpeg', keyring: 'https://i.imgur.com/tcZQmDU.jpeg' },
+      { title: 'The Chariot 🛡️', message: '당신의 의지로 앞으로 나아가세요.', image: 'https://i.imgur.com/gqyUj0m.jpeg', keyring: 'https://i.imgur.com/AQh5yoN.jpeg' },
+      { title: 'The World 🌍', message: '모든 것이 하나로 연결되고 있어요.', image: 'https://i.imgur.com/kjitYcP.jpeg', keyring: 'https://i.imgur.com/G1E3SVg.jpeg' },
+      { title: 'Strength 🐯', message: '당신 안의 용기를 믿어보세요.', image: 'https://i.imgur.com/Q0Vr21V.jpeg', keyring: 'https://i.imgur.com/pKfRu4J.jpeg' },
+      { title: 'Justice ⚖️', message: '당신의 선택은 옳습니다.', image: 'https://i.imgur.com/wSgEvjF.jpeg', keyring: 'https://i.imgur.com/Xj93zZ9.jpeg' }
+    ];
+
+    for (let i = 0; i < cardData.length; i++) {
       const card = document.createElement('img');
       card.src = cardBackImg;
       card.className = 'tarot-card';
       card.onclick = function () {
-        const picked = cardData[Math.floor(Math.random() * cardData.length)];
+        const picked = cardData[i];
         resultImage.src = picked.image;
+        keyringImage.src = picked.keyring;
         resultTitle.textContent = picked.title;
         resultMessage.textContent = picked.message;
         resultModal.style.display = 'flex';
