@@ -36,38 +36,47 @@
     .tarot-card:hover {
       transform: scale(1.05);
     }
+
     #result-modal {
       display: none;
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.8);
+      background: rgba(0,0,0,0.85);
       color: #fff;
       z-index: 20;
-      justify-content: center;
-      align-items: center;
       flex-direction: column;
-      padding: 20px;
-    }
-    #result-images {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
       align-items: center;
-      flex-wrap: wrap;
+      justify-content: flex-start;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .modal-content {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+      flex-wrap: nowrap;
       margin-bottom: 20px;
     }
-    #result-images img {
-      max-width: 180px;
+
+    .card-image,
+    .keyring-image {
+      width: 150px;
+      height: auto;
+      object-fit: cover;
       border-radius: 8px;
     }
+
     #result-title {
       font-size: 1.4rem;
       margin-bottom: 10px;
     }
+
     #result-message {
       font-size: 1rem;
       margin-bottom: 20px;
     }
+
     #buy-btn, #back-btn {
       background: #ffe066;
       color: #000;
@@ -78,6 +87,7 @@
       border-radius: 8px;
       margin: 5px;
     }
+
     #meaning-btn {
       margin-top: 30px;
       background: transparent;
@@ -87,16 +97,24 @@
       border-radius: 8px;
       cursor: pointer;
     }
+
     #meaning-btn:hover {
       background: #fff;
       color: #0b1020;
     }
+
     @media (max-width: 600px) {
+      .modal-content {
+        flex-direction: row;
+        overflow-x: auto;
+        justify-content: flex-start;
+      }
+      .card-image, .keyring-image {
+        width: 120px;
+        flex-shrink: 0;
+      }
       #card-container {
         max-width: 90%;
-      }
-      #result-images {
-        flex-direction: column;
       }
     }
   </style>
@@ -112,9 +130,9 @@
 
   <!-- 결과 모달 -->
   <div id="result-modal" class="modal">
-    <div id="result-images">
-      <img id="result-image" src="" alt="Card">
-      <img id="keyring-image" src="" alt="Keyring">
+    <div class="modal-content">
+      <img id="result-image" src="" alt="Card" class="card-image">
+      <img id="keyring-image" src="" alt="Keyring" class="keyring-image">
     </div>
     <div id="result-title">카드 제목</div>
     <div id="result-message">카드 메시지</div>
@@ -131,6 +149,7 @@
     const resultMessage = document.getElementById('result-message');
 
     const cardBackImg = 'https://i.imgur.com/ocK7mpS.jpeg';
+
     const cardData = [
       {
         title: 'The Sun ☀️',
@@ -142,67 +161,67 @@
         title: 'The Moon 🌙',
         message: '당신의 직관을 믿어보세요.',
         image: 'https://i.imgur.com/iblfhTE.jpeg',
-        keyring: 'https://i.imgur.com/FbB8n2s.jpeg'
+        keyring: 'https://i.imgur.com/59smQuK.jpeg'
       },
       {
         title: 'The Star ✨',
         message: '희망은 언제나 당신 곁에 있습니다.',
         image: 'https://i.imgur.com/HzlHt4j.jpeg',
-        keyring: 'https://i.imgur.com/LI7XkRP.jpeg'
+        keyring: 'https://i.imgur.com/GV41Hw6.jpeg'
       },
       {
         title: 'The Lovers 💕',
         message: '사랑과 연결의 기운이 함께합니다.',
         image: 'https://i.imgur.com/hS1gk9W.jpeg',
-        keyring: 'https://i.imgur.com/qWR0yRw.jpeg'
+        keyring: 'https://i.imgur.com/xMwRyDU.jpeg'
       },
       {
         title: 'The Magician 🪄',
         message: '무엇이든 시작할 수 있는 힘이 있어요.',
         image: 'https://i.imgur.com/WU4dgbK.jpeg',
-        keyring: 'https://i.imgur.com/b9xC5qW.jpeg'
+        keyring: 'https://i.imgur.com/9uYDXPe.jpeg'
       },
       {
         title: 'The Hermit 🔦',
         message: '당신의 내면의 빛을 따라가세요.',
         image: 'https://i.imgur.com/MkGArEw.jpeg',
-        keyring: 'https://i.imgur.com/ExR5Twf.jpeg'
+        keyring: 'https://i.imgur.com/A1n0fvB.jpeg'
       },
       {
         title: 'Temperance 🌈',
         message: '균형과 조화가 필요해요.',
         image: 'https://i.imgur.com/JgsoRQ7.jpeg',
-        keyring: 'https://i.imgur.com/jHsfMCd.jpeg'
+        keyring: 'https://i.imgur.com/BdGrf5E.jpeg'
       },
       {
         title: 'Judgement 🎺',
         message: '변화의 순간, 다시 시작할 기회입니다.',
         image: 'https://i.imgur.com/uq16BSC.jpeg',
-        keyring: 'https://i.imgur.com/0kzt9Di.jpeg'
+        keyring: 'https://i.imgur.com/W7tZgLz.jpeg'
       },
       {
         title: 'The Chariot 🛡️',
         message: '당신의 의지로 앞으로 나아가세요.',
         image: 'https://i.imgur.com/gqyUj0m.jpeg',
-        keyring: 'https://i.imgur.com/Bj9pmCE.jpeg'
+        keyring: 'https://i.imgur.com/2RPPKrd.jpeg'
       },
       {
         title: 'The World 🌍',
         message: '모든 것이 하나로 연결되고 있어요.',
         image: 'https://i.imgur.com/kjitYcP.jpeg',
-        keyring: 'https://i.imgur.com/jDAgAfI.jpeg'
+        keyring: 'https://i.imgur.com/oZwCvVP.jpeg'
       },
       {
         title: 'Strength 🐯',
         message: '당신 안의 용기를 믿어보세요.',
         image: 'https://i.imgur.com/Q0Vr21V.jpeg',
-        keyring: 'https://i.imgur.com/9LUQUwU.jpeg'
+        keyring: 'https://i.imgur.com/HkyEiqW.jpeg'
       },
       {
         title: 'Justice ⚖️',
         message: '당신의 선택은 옳습니다.',
         image: 'https://i.imgur.com/wSgEvjF.jpeg',
-        keyring: 'https://i.imgur.com/4vl2Tyz.jpeg'
+        keyring: 'https://i.imgur.com/txYeNVp.jpeg'
       }
     ];
 
@@ -211,7 +230,7 @@
       card.src = cardBackImg;
       card.className = 'tarot-card';
       card.onclick = function () {
-        const picked = cardData[Math.floor(Math.random() * cardData.length)];
+        const picked = cardData[i];
         resultImage.src = picked.image;
         keyringImage.src = picked.keyring;
         resultTitle.textContent = picked.title;
