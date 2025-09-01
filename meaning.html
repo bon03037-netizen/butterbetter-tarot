@@ -5,98 +5,105 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>전체 타로카드 의미 보기 | 버터베러</title>
   <style>
-    body {
-      margin: 0;
-      background-color: #0b1020;
-      color: #fff;
-      font-family: 'Noto Sans KR', sans-serif;
-      padding: 20px;
-      text-align: center;
-    }
-    h1 {
-      margin-bottom: 1rem;
-      font-size: 1.8rem;
-    }
-    .btn-top {
-      margin-bottom: 1.5rem;
-      padding: 8px 16px;
-      background: #ffe066;
-      color: #000;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+  @font-face {
+    font-family: 'KCC-eunyoung';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2107@1.1/KCC-eunyoung.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  body {
+    margin: 0;
+    background-color: #0b1020;
+    color: #fff;
+    font-family: 'KCC-eunyoung', cursive;
+    padding: 20px;
+    text-align: center;
+  }
+  h1 {
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+  }
+  .btn-top {
+    margin-bottom: 1.5rem;
+    padding: 8px 16px;
+    background: #ffe066;
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .card {
+    background: #1a1f30;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .card:hover {
+    transform: scale(1.03);
+  }
+  .card img {
+    width: 100%;
+    border-radius: 4px;
+  }
+  .card-title {
+    margin-top: 8px;
+    font-size: 1rem;
+  }
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0,0,0,0.8);
+    color: #fff;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    padding: 20px;
+  }
+  .modal-content {
+    background: #1f263a;
+    border-radius: 10px;
+    max-width: 500px;
+    padding: 20px;
+    text-align: center;
+  }
+  .modal-content img {
+    width: 150px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  .modal-content h2 {
+    margin-bottom: 10px;
+  }
+  .modal-content p {
+    margin-bottom: 20px;
+  }
+  .btn {
+    padding: 8px 16px;
+    background: #ffe066;
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 5px;
+  }
+  @media (max-width: 600px) {
     .card-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      max-width: 900px;
-      margin: 0 auto;
+      grid-template-columns: repeat(2, 1fr);
     }
-    .card {
-      background: #1a1f30;
-      padding: 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .card:hover {
-      transform: scale(1.03);
-    }
-    .card img {
-      width: 100%;
-      border-radius: 4px;
-    }
-    .card-title {
-      margin-top: 8px;
-      font-size: 1rem;
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: rgba(0,0,0,0.8);
-      color: #fff;
-      justify-content: center;
-      align-items: center;
-      z-index: 100;
-      padding: 20px;
-    }
-    .modal-content {
-      background: #1f263a;
-      border-radius: 10px;
-      max-width: 500px;
-      padding: 20px;
-      text-align: center;
-    }
-    .modal-content img {
-      width: 150px;
-      border-radius: 8px;
-      margin-bottom: 10px;
-    }
-    .modal-content h2 {
-      margin-bottom: 10px;
-    }
-    .modal-content p {
-      margin-bottom: 20px;
-    }
-    .btn {
-      padding: 8px 16px;
-      background: #ffe066;
-      color: #000;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      margin: 5px;
-    }
-    @media (max-width: 600px) {
-      .card-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
   <button class="btn-top" onclick="window.location.href='index.html'">🔙 처음 화면으로 돌아가기</button>
@@ -119,62 +126,174 @@
       {
         title: 'The Sun ☀️',
         image: 'https://i.imgur.com/pIqWqrL.jpeg',
-        message: '오늘도 밝게 빛날 당신의 하루!'
+        message: `"오늘도 밝게 빛날 당신의 하루!"<br><br>
+        🔑 키워드<br>
+        빛 · 희망 · 자신감 · 긍정 · 생명력<br><br>
+        ✨ 의미<br>
+        The Sun 카드는 따뜻하고 긍정적인 에너지를 상징합니다.<br>
+        당신은 주변에 좋은 영향을 주는 사람이며,<br>
+        지금은 자신을 믿고 나아가기에 좋은 시기입니다.<br>
+        밝은 에너지를 잃지 말라는 응원의 메시지가 담겨 있어요.<br><br>
+        💬 메시지<br>
+        당신 안의 빛은 충분해요.<br>
+        지금의 당신을 믿고, 따뜻한 길을 계속 걸어가도 괜찮아요.`,
       },
       {
         title: 'The Moon 🌙',
         image: 'https://i.imgur.com/ZlneLrh.jpeg',
-        message: '당신의 직관을 믿어보세요.'
+        message: `"당신의 직관을 믿어보세요"<br><br>
+        🔑 키워드<br>
+        직관 · 감성 · 혼란 · 잠재의식 · 불확실성<br><br>
+        ✨ 의미<br>
+        The Moon 카드는 감각과 직관에 귀 기울이라는 신호입니다.<br>
+        아직 모든 것이 드러나지 않았기에<br>
+        속단보다는 자신을 보호하는 선택이 필요해요.<br>
+        내면의 목소리가 중요한 때입니다.<br><br>
+        💬 메시지<br>
+        모든 게 명확하지 않아도 괜찮아요.<br>
+        당신의 마음은 이미 답을 알고 있어요.`,
       },
       {
         title: 'The Star ✨',
         image: 'https://i.imgur.com/Z7udZRe.jpeg',
-        message: '희망은 언제나 당신 곁에 있습니다.'
+        message: `"희망은 언제나 당신 곁에 있습니다."<br><br>
+        🔑 키워드<br>
+        희망 · 영감 · 회복 · 미래지향 · 순수함<br><br>
+        ✨ 의미<br>
+        The Star 카드는 작지만 확실한 희망의 상징입니다.<br>
+        지친 마음을 위로하고,<br>
+        잊고 있던 꿈을 다시 떠오르게 합니다.<br>
+        지금의 당신은 이미 많은 걸 이겨낸 사람입니다.<br><br>
+        💬 메시지<br>
+        작은 희망은 결국 큰 빛이 됩니다.<br>
+        당신의 내일은 분명 더 나아질 거예요.`,
       },
       {
         title: 'The Lovers 💕',
         image: 'https://i.imgur.com/KFrOrla.jpeg',
-        message: '사랑과 연결의 기운이 함께합니다.'
+        message: `"사랑과 연결의 기운이 함께합니다."<br><br>
+        🔑 키워드<br>
+        선택 · 관계 · 연결 · 사랑 · 진실성<br><br>
+        ✨ 의미<br>
+        The Lovers 카드는 관계와 중요한 선택을 의미합니다.<br>
+        마음을 따르는 용기,<br>
+        그리고 진심에 대한 응답이 필요한 시기예요.<br><br>
+        💬 메시지<br>
+        진심은 결국 닿게 되어 있어요.<br>
+        지금의 선택이 당신을 더 단단하게 만들 거예요.`,
       },
       {
         title: 'The Magician 🪄',
         image: 'https://i.imgur.com/4Ae3nhm.jpeg',
-        message: '무엇이든 시작할 수 있는 힘이 있어요.'
+        message: `"무엇이든 시작할 수 있는 힘이 있어요."<br><br>
+        🔑 키워드<br>
+        시작 · 창조성 · 능력 · 자원 · 집중<br><br>
+        ✨ 의미<br>
+        The Magician 카드는<br>
+        지금이 무언가를 시작하기 좋은 타이밍임을 알려줍니다.<br>
+        이미 필요한 자원과 능력을 갖추고 있어요.<br><br>
+        💬 메시지<br>
+        당신은 이미 준비된 사람입니다.<br>
+        망설이지 말고 시작해도 좋아요.`,
       },
       {
         title: 'The Hermit 🔦',
         image: 'https://i.imgur.com/rcNVoCk.jpeg',
-        message: '당신의 내면의 빛을 따라가세요.'
+        message: `"당신의 내면의 빛을 따라가세요."<br><br>
+        🔑 키워드<br>
+        내면탐색 · 고요함 · 집중 · 혼자만의 시간 · 통찰<br><br>
+        ✨ 의미<br>
+        The Hermit 카드는 고요한 시간 속에서<br>
+        자신을 깊이 들여다볼 필요가 있음을 말해줍니다.<br>
+        혼자만의 길에서 얻는 통찰은 더 단단한 성장을 이끕니다.<br><br>
+        💬 메시지<br>
+        고요함 속에서도 당신은 성장하고 있어요.<br>
+        혼자의 길도 의미 있는 여정입니다.`,
       },
       {
         title: 'Temperance 🌈',
         image: 'https://i.imgur.com/9tjxxg8.jpeg',
-        message: '균형과 조화가 필요해요.'
+        message: `"균형과 조화가 필요해요."<br><br>
+        🔑 키워드<br>
+        균형 · 조화 · 인내 · 중용 · 흐름<br><br>
+        ✨ 의미<br>
+        Temperance 카드는 삶의 균형과 조화를 뜻합니다.<br>
+        지금은 서두르기보다 흐름을 받아들이는 것이 중요해요.<br>
+        절제는 견딤이 아닌, 성숙의 상징입니다.<br><br>
+        💬 메시지<br>
+        지금 충분히 잘하고 있어요.<br>
+        모든 것은 자연스럽게 제자리를 찾을 거예요.`,
       },
       {
         title: 'Judgement 🎺',
         image: 'https://i.imgur.com/lRbYQtH.jpeg',
-        message: '변화의 순간, 다시 시작할 기회입니다.'
+        message: `"변화의 순간, 다시 시작할 기회입니다."<br><br>
+        🔑 키워드<br>
+        변화 · 새로운 기회 · 되돌아봄 · 용서 · 결단<br><br>
+        ✨ 의미<br>
+        Judgement 카드는 변화의 시점과<br>
+        새로운 기회에 대한 문이 열리는 시기를 뜻합니다.<br>
+        과거를 돌아보고 앞으로 나아갈 때예요.<br><br>
+        💬 메시지<br>
+        지금이 바로 다시 시작할 때예요.<br>
+        당신의 선택이 새로운 문을 열어줄 거예요.`,
       },
       {
         title: 'The Chariot 🛡️',
         image: 'https://i.imgur.com/rUGm0Vi.jpeg',
-        message: '당신의 의지로 앞으로 나아가세요.'
+        message: `"당신의 의지로 앞으로 나아가세요."<br><br>
+        🔑 키워드<br>
+        의지 · 전진 · 집중력 · 도전 · 추진력<br><br>
+        ✨ 의미<br>
+        The Chariot 카드는 강한 의지와 추진력을 상징합니다.<br>
+        지금은 흔들림 없이 앞으로 나아가야 할 때입니다.<br><br>
+        💬 메시지<br>
+        당신은 앞으로 나아갈 수 있는 사람입니다.<br>
+        멈추지 말고 계속 전진하세요.`,
       },
       {
         title: 'The World 🌍',
         image: 'https://i.imgur.com/rUGm0Vi.jpeg',
-        message: '모든 것이 하나로 연결되고 있어요.'
+        message: `"모든 것이 하나로 연결되고 있어요."<br><br>
+        🔑 키워드<br>
+        완성 · 연결 · 성취 · 순환 · 통합<br><br>
+        ✨ 의미<br>
+        The World 카드는 여정의 완성과<br>
+        새로운 시작을 동시에 의미합니다.<br>
+        당신의 노력은 결실을 맺고 있습니다.<br><br>
+        💬 메시지<br>
+        지금의 당신은 새로운 세계를 향해 가고 있어요.<br>
+        충분히 잘 해오셨습니다.`,
       },
       {
         title: 'Strength 🐯',
         image: 'https://i.imgur.com/GAVhkiD.jpeg',
-        message: '당신 안의 용기를 믿어보세요.'
+        message: `"당신 안의 용기를 믿어보세요."<br><br>
+        🔑 키워드<br>
+        용기 · 인내 · 온화한 힘 · 자존감 · 회복력<br><br>
+        ✨ 의미<br>
+        Strength 카드는 조용하지만 깊은 힘을 뜻합니다.<br>
+        인내와 회복, 자기 믿음이 필요한 시기입니다.<br><br>
+        💬 메시지<br>
+        당신은 이미 충분히 강한 사람입니다.<br>
+        자신의 내면을 믿어주세요.`,
       },
       {
         title: 'Justice ⚖️',
-        image: 'https://i.imgur.com/wSgEvjF.jpeg',
-        message: '당신의 선택은 옳습니다.'
+        image: 'https://i.imgur.com/bEs0bTD.jpeg',
+        message: `"당신의 판단은 더 큰 균형을 만들고 있어요."<br><br>
+        🔑 키워드<br>
+        공정함 · 균형 · 책임 · 이성 · 진실<br><br>
+        ✨ 의미<br>
+        Justice 카드는 모든 일에<br>
+        이유와 결과가 따름을 알려줍니다.<br>
+        지금은 감정보다<br>
+        이성과 공정함이 필요한 때입니다.<br><br>
+        당신의 선택이 옳았다면,<br>
+        그것은 곧 정당한 결과로 이어질 거예요.<br><br>
+        💬 메시지<br>
+        지금 내리는 판단은 오래도록 남을 수 있습니다.<br>
+        진실하고 책임감 있게 선택하세요.`,
       }
     ];
 
@@ -194,7 +313,7 @@
       div.onclick = () => {
         modalImage.src = card.image;
         modalTitle.textContent = card.title;
-        modalMessage.textContent = card.message;
+        modalMessage.innerHTML = card.message;
         modal.style.display = 'flex';
       };
       grid.appendChild(div);
