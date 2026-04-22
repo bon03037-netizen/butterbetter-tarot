@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>버터베러 타로 · Butter Better</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Cinzel+Decorative:wght@400;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════
+   RESET & CUSTOM PROPERTIES
+════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --c-bg:         #05091a;
+  --c-navy:       #0b1230;
+  --c-navy2:      #111d45;
+  --c-purple:     #1e0e4a;
+  --c-violet:     #2d1472;
+  --c-gold:       #c9a84c;
+  --c-gold-lt:    #f0d080;
+  --c-gold-dim:   rgba(201,168,76,0.35);
+  --c-cream:      #f0e6d0;
+  --c-mist:       rgba(240,230,208,0.65);
+  --c-glow-v:     rgba(160,80,255,0.7);
+  --c-glow-b:     rgba(60,140,255,0.7);
+  --c-glow-t:     rgba(50,220,180,0.65);
+  --radius-card:  14px;
+  --dur-screen:   0.55s;
+}
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: var(--c-bg);
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--c-cream);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  overscroll-behavior: none;
+}
+
+/* ════════════════════════════════════════
+   CANVAS (stars)
+════════════════════════════════════════ */
+#cv-stars {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+}
+
+/* ════════════════════════════════════════
+   SCREENS
+════════════════════════════════════════ */
+.screen {
+  position: fixed; inset: 0; z-index: 10;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-start;
+  overflow: hidden;
+}
+.screen.s-center { justify-content: center; }
+
+.screen { opacity: 1; }
+.screen.is-hidden {
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideOut {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-32px); }
+}
+.screen.anim-out { animation: slideOut var(--dur-screen) cubic-bezier(.4,0,.2,1) forwards; }
+.screen.anim-in  { animation: slideIn  var(--dur-screen) cubic-bezier(.2,0,.2,1) both; }
+
+/* ════════════════════════════════════════
+   COMMON ATOMS
+════════════════════════════════════════ */
+.gold-text {
+  background: linear-gradient(135deg, #b8902a 0%, #f0d080 45%, #c9a84c 70%, #f0d080 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  filter: drop-shadow(0 0 10px rgba(201,168,76,0.45));
+}
+.serif { font-family: 'Noto Serif KR', serif; }
+.cinzel { font-family: 'Cinzel Decorative', serif; }
+
+/* ════════════════════════════════════════
+   SCREEN 1 — INTRO
+════════════════════════════════════════ */
+#s1 {
+  justify-content: center;
+  gap: clamp(18px, 5vw, 28px);
+  padding: 0 16px;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, #120830 0%, #05091a 100%);
+}
+
+.brand { text-align: center; }
+.brand-name {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(1.1rem, 5vw, 1.5rem);
+  letter-spacing: .14em;
+}
+.brand-sub {
+  margin-top: 5px;
+  font-size: .65rem; letter-spacing: .32em; text-transform: uppercase;
+  color: rgba(240,230,208,0.42);
+}
+
+.i-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(8px, 2.5vw, 13px);
+  width: min(82vw, 310px);
+}
+.i-card {
+  aspect-ratio: 2/3;
+  perspective: 700px;
+}
+.i-card-inner {
+  width: 100%; height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  border-radius: var(--radius-card);
+  will-change: transform;
+}
+.i-face {
+  position: absolute; inset: 0;
+  border-radius: var(--radius-card);
+  backface-visibility: hidden;
+  overflow: hidden;
+  border: 1.5px solid var(--c-gold-dim);
+}
+.i-front {
+  background: linear-gradient(155deg, var(--c-navy2), var(--c-purple));
+  display: flex; align-items: center; justify-content: center;
+}
+.i-front img {
+  width: 100%; height: 100%; object-fit: cover; opacity: .82;
+}
+.i-back {
+  background: linear-gradient(155deg, #08102a, #14093a);
+  transform: rotateY(180deg);
+  display: flex; align-items: center; justify-content: center;
+}
+.i-back-sym {
+  font-size: 2rem; color: var(--c-gold-dim);
+  text-shadow: 0 0 14px rgba(201,168,76,0.35);
+  animation: symFloat 3s ease-in-out infinite;
+}
+@keyframes symFloat {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+@keyframes fullFlip {
+  0%   { transform: rotateY(0deg)   scale(1); }
+  40%  { transform: rotateY(180deg) scale(1.04); }
+  100% { transform: rotateY(360deg) scale(1); }
+}
+.i-card-inner.flip {
+  animation: fullFlip .8s cubic-bezier(.45,0,.25,1) both;
+}
+.i-front::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.06) 50%, transparent 70%);
+  opacity: 0; border-radius: inherit;
+}
+.i-card-inner.flipped .i-front::after {
+  opacity: 1;
+  animation: cardShine 3s ease infinite;
+}
+@keyframes cardShine {
+  0%,100% { opacity: 0; }
+  50%      { opacity: 1; }
+}
+
+.i-cta {
+  text-align: center;
+  opacity: 0; transform: translateY(14px);
+  transition: opacity .65s ease, transform .65s ease;
+  pointer-events: none;
+}
+.i-cta.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.i-cta p {
+  font-family: 'Noto Serif KR', serif;
+  font-size: .88rem; font-weight: 300;
+  letter-spacing: .09em; line-height: 1.75;
+  color: var(--c-mist); margin-bottom: 18px;
+}
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 13px 32px; border-radius: 50px; border: none;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: .84rem; font-weight: 500; letter-spacing: .1em;
+  cursor: pointer; position: relative; overflow: hidden;
+  background: linear-gradient(135deg, #160840 0%, #2b0f80 50%, #160840 100%);
+  color: var(--c-gold-lt);
+  border: 1.5px solid rgba(201,168,76,.48);
+  box-shadow: 0 0 22px rgba(80,40,180,.55), inset 0 1px 0 rgba(255,255,255,.08);
+  transition: transform .18s, box-shadow .18s;
+}
+.btn-ghost::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.09), transparent);
+  transform: translateX(-100%);
+  animation: sheen 2.8s ease infinite;
+}
+.btn-ghost:active { transform: scale(.97); }
+@keyframes sheen { to { transform: translateX(110%); } }
+
+/* ════════════════════════════════════════
+   SCREEN 2 — CARD SELECTION
+════════════════════════════════════════ */
+#s2 {
+  justify-content: flex-start;
+  background: linear-gradient(175deg, #070d20 0%, #0c1638 100%);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  padding-bottom: 130px;
+}
+
+.sel-header {
+  width: 100%;
+  padding: 54px 20px 16px;
+  text-align: center;
+  flex-shrink: 0;
+  position: sticky; top: 0; z-index: 20;
+  background: linear-gradient(to bottom, #070d20 70%, transparent);
+  padding-bottom: 12px;
+}
+.sel-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 1rem; letter-spacing: .09em;
+  margin-bottom: 5px;
+}
+.sel-desc {
+  font-size: .75rem; color: rgba(240,230,208,.48);
+  letter-spacing: .04em; line-height: 1.6;
+}
+.sel-tally {
+  display: inline-flex; align-items: center; gap: 9px;
+  margin-top: 10px; padding: 5px 14px; border-radius: 20px;
+  background: rgba(201,168,76,.07);
+  border: 1px solid rgba(201,168,76,.2);
+  font-size: .72rem; color: var(--c-gold-lt);
+}
+.tally-dots { display: flex; gap: 5px; }
+.t-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: rgba(201,168,76,.18);
+  border: 1px solid rgba(201,168,76,.38);
+  transition: all .35s cubic-bezier(.34,1.56,.64,1);
+}
+.t-dot.on {
+  background: var(--c-gold);
+  box-shadow: 0 0 8px var(--c-gold), 0 0 16px rgba(201,168,76,.4);
+  transform: scale(1.2);
+}
+
+.sel-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 13px;
+  padding: 8px 16px;
+  width: 100%;
+}
+.sel-card {
+  aspect-ratio: 2/3; border-radius: var(--radius-card);
+  position: relative; cursor: pointer; overflow: hidden;
+  border: 2px solid rgba(255,255,255,.06);
+  background: linear-gradient(155deg, var(--c-navy2), var(--c-purple));
+  transition:
+    transform .32s cubic-bezier(.34,1.56,.64,1),
+    box-shadow .32s ease,
+    border-color .32s ease;
+  will-change: transform;
+}
+.sel-card img {
+  width: 100%; height: 100%; object-fit: cover;
+  opacity: .8; transition: opacity .3s;
+  pointer-events: none;
+}
+.sel-card-lbl {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 22px 5px 7px;
+  background: linear-gradient(to top, rgba(5,9,26,.96), transparent);
+  text-align: center;
+  font-size: .58rem; font-weight: 500; letter-spacing: .04em;
+  color: var(--c-cream); line-height: 1.35;
+  pointer-events: none;
+}
+.sel-card-lbl span {
+  display: block; font-size: .5rem;
+  color: rgba(240,230,208,.4); margin-top: 1px;
+}
+.sel-card.chosen {
+  transform: translateY(-7px);
+  border-color: var(--c-gold);
+  box-shadow:
+    0 0 20px rgba(201,168,76,.55),
+    0 0 48px rgba(201,168,76,.2),
+    inset 0 0 20px rgba(201,168,76,.07);
+}
+.sel-card.chosen img { opacity: 1; }
+.s-ring {
+  position: absolute; inset: -3px;
+  border-radius: calc(var(--radius-card) + 2px);
+  border: 2px solid var(--c-gold);
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s;
+}
+.sel-card.chosen .s-ring {
+  opacity: 1;
+  animation: ringGlow 2s ease-in-out infinite;
+}
+@keyframes ringGlow {
+  0%,100% { box-shadow: 0 0 8px rgba(201,168,76,.35); }
+  50%      { box-shadow: 0 0 24px rgba(201,168,76,.75), 0 0 44px rgba(201,168,76,.25); }
+}
+.spark {
+  position: fixed; pointer-events: none; z-index: 500;
+  font-size: .68rem; line-height: 1;
+  animation: sparkPop .65s ease forwards;
+}
+@keyframes sparkPop {
+  0%   { opacity: 1; transform: scale(0) rotate(0deg) translateY(0); }
+  55%  { opacity: 1; transform: scale(1.5) rotate(160deg) translateY(-6px); }
+  100% { opacity: 0; transform: scale(.8) rotate(340deg) translateY(-18px); }
+}
+
+.float-btn-wrap {
+  position: fixed; bottom: 26px; left: 50%;
+  transform: translateX(-50%) translateY(110px);
+  width: min(88vw, 300px); z-index: 100;
+  opacity: 0;
+  transition: transform .52s cubic-bezier(.34,1.56,.64,1), opacity .38s ease;
+}
+.float-btn-wrap.up {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+.btn-fate {
+  width: 100%; padding: 15px 20px; border: none; border-radius: 50px;
+  font-family: 'Noto Serif KR', serif;
+  font-size: .92rem; font-weight: 600; letter-spacing: .13em;
+  color: #fff; cursor: pointer;
+  background: linear-gradient(135deg, #5b14d6, #8f22e8, #5b14d6);
+  background-size: 200%;
+  box-shadow: 0 4px 28px rgba(140,40,230,.65), 0 0 56px rgba(140,40,230,.2);
+  position: relative; overflow: hidden;
+  animation: fatePulse 2.6s ease infinite;
+}
+.btn-fate::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.14), transparent);
+  transform: translateX(-100%);
+  animation: sheen 2s ease infinite;
+}
+.btn-fate:active { transform: scale(.97); }
+@keyframes fatePulse {
+  0%,100% { box-shadow: 0 4px 28px rgba(140,40,230,.65), 0 0 56px rgba(140,40,230,.2); }
+  50%      { box-shadow: 0 4px 40px rgba(140,40,230,.95), 0 0 80px rgba(140,40,230,.4); }
+}
+
+/* ════════════════════════════════════════
+   SCREEN 3 — CRYSTAL LOADING
+════════════════════════════════════════ */
+#s3 {
+  justify-content: center;
+  background: radial-gradient(ellipse 90% 80% at 50% 45%, #090320 0%, #03060f 100%);
+}
+
+.orb-wrap {
+  position: relative; width: 220px; height: 220px;
+  display: flex; align-items: center; justify-content: center;
+}
+.o-ring {
+  position: absolute; border-radius: 50%;
+  border: 1.5px solid rgba(130,70,255,.28);
+  animation: oRingExp 3.6s ease-out infinite;
+  width: 170px; height: 170px;
+}
+.o-ring:nth-child(2) { animation-delay: 1.2s; }
+.o-ring:nth-child(3) { animation-delay: 2.4s; }
+@keyframes oRingExp {
+  0%   { width: 170px; height: 170px; opacity: .7; }
+  100% { width: 330px; height: 330px; opacity: 0; }
+}
+.orb {
+  width: 170px; height: 170px; border-radius: 50%;
+  position: relative; overflow: hidden;
+  background:
+    radial-gradient(circle at 33% 28%,
+      rgba(200,170,255,.95) 0%,
+      rgba(90,55,210,.8)  22%,
+      rgba(18,8,70,.95)   58%,
+      rgba(4,1,20,1)      100%
+    );
+  box-shadow:
+    0 0 50px rgba(110,60,255,.65),
+    0 0 100px rgba(90,45,210,.4),
+    0 0 160px rgba(70,30,180,.18),
+    inset 0 0 45px rgba(170,130,255,.12);
+  animation: orbGlow 3s ease-in-out infinite, orbHue 9s linear infinite;
+  will-change: filter;
+}
+@keyframes orbGlow {
+  0%,100% {
+    box-shadow: 0 0 50px rgba(110,60,255,.65), 0 0 100px rgba(90,45,210,.4),
+                0 0 160px rgba(70,30,180,.18), inset 0 0 45px rgba(170,130,255,.12);
+  }
+  33% {
+    box-shadow: 0 0 65px rgba(50,190,255,.75), 0 0 120px rgba(40,150,255,.5),
+                0 0 200px rgba(30,110,240,.22), inset 0 0 55px rgba(110,200,255,.18);
+  }
+  66% {
+    box-shadow: 0 0 60px rgba(200,60,255,.72), 0 0 110px rgba(160,50,230,.48),
+                0 0 180px rgba(120,35,210,.2), inset 0 0 50px rgba(200,120,255,.15);
+  }
+}
+@keyframes orbHue { to { filter: hue-rotate(360deg); } }
+.orb-hi {
+  position: absolute; top: 13%; left: 18%;
+  width: 42%; height: 28%; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(255,255,255,.45), transparent 70%);
+  animation: hiWobble 4s ease-in-out infinite;
+}
+@keyframes hiWobble {
+  0%,100% { transform: translate(0,0) scale(1); opacity: .7; }
+  50%      { transform: translate(4px,2px) scale(1.08); opacity: 1; }
+}
+.orb-nebula {
+  position: absolute; inset: 0; border-radius: 50%;
+  background:
+    radial-gradient(ellipse 60% 40% at 70% 60%, rgba(50,200,255,.12), transparent),
+    radial-gradient(ellipse 50% 50% at 30% 35%, rgba(180,80,255,.1), transparent);
+  animation: nebulaSwirl 6s linear infinite;
+}
+@keyframes nebulaSwirl { to { transform: rotate(360deg); } }
+.orb-particles { position: absolute; inset: -28px; pointer-events: none; }
+.orb-base {
+  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 78px; height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(to bottom, rgba(70,40,140,.5), rgba(15,8,40,.7));
+  box-shadow: 0 6px 20px rgba(60,30,120,.4);
+}
+.orb-base::after {
+  content: '';
+  position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  width: 18px; height: 6px;
+  border-radius: 0 0 9px 9px;
+  background: rgba(40,20,90,.7);
+}
+.load-txt {
+  margin-top: 52px;
+  font-family: 'Noto Serif KR', serif;
+  font-size: .83rem; font-weight: 300;
+  letter-spacing: .2em; color: rgba(240,230,208,.6);
+  animation: txtPulse 2.2s ease-in-out infinite;
+}
+@keyframes txtPulse {
+  0%,100% { opacity: .3; } 50% { opacity: 1; }
+}
+
+.fly-card {
+  position: fixed; z-index: 300;
+  width: 62px; height: 93px;
+  border-radius: 9px; overflow: hidden;
+  border: 1.5px solid rgba(201,168,76,.45);
+  box-shadow: 0 8px 28px rgba(0,0,0,.7), 0 0 16px rgba(140,60,255,.3);
+  pointer-events: none; opacity: 0;
+  will-change: transform, opacity;
+}
+.fly-card img { width: 100%; height: 100%; object-fit: cover; }
+.fly-label {
+  position: fixed; z-index: 301;
+  font-size: .6rem; letter-spacing: .24em;
+  color: var(--c-gold); font-weight: 500;
+  text-shadow: 0 0 10px rgba(201,168,76,.6);
+  pointer-events: none; opacity: 0;
+  transform: translateX(-50%);
+  transition: opacity .4s ease;
+}
+
+/* ════════════════════════════════════════
+   SCREEN 4 — RESULT
+════════════════════════════════════════ */
+#s4 {
+  justify-content: flex-start;
+  background: linear-gradient(170deg, #060c1e 0%, #0b1535 100%);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 60px;
+}
+
+.res-top {
+  position: sticky; top: 0; z-index: 20;
+  width: 100%; flex-shrink: 0;
+  padding: 48px 18px 0;
+  background: linear-gradient(to bottom, #060c1e 70%, transparent);
+}
+.res-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: .94rem; letter-spacing: .09em;
+  text-align: center; margin-bottom: 4px;
+}
+.res-date {
+  font-size: .64rem; color: rgba(240,230,208,.34);
+  letter-spacing: .16em; text-align: center;
+}
+
+.res-row {
+  display: flex; justify-content: center;
+  gap: 10px; padding: 18px 14px 0;
+  width: 100%; flex-shrink: 0;
+}
+.res-slot {
+  flex: 1; max-width: 105px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  opacity: 0; transform: translateY(24px) scale(.95);
+  transition: opacity .5s ease, transform .5s cubic-bezier(.34,1.2,.64,1);
+}
+.res-slot.show { opacity: 1; transform: translateY(0) scale(1); }
+.res-img-wrap {
+  width: 100%; aspect-ratio: 2/3;
+  border-radius: 11px; overflow: hidden;
+  border: 1.5px solid rgba(201,168,76,.42);
+  box-shadow: 0 5px 22px rgba(0,0,0,.55);
+  position: relative;
+}
+.res-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+.res-img-wrap::after {
+  content: ''; position: absolute; inset: 0; border-radius: 10px;
+  pointer-events: none;
+}
+.res-slot:nth-child(1) .res-img-wrap::after { box-shadow: inset 0 0 18px rgba(170,110,255,.2); }
+.res-slot:nth-child(2) .res-img-wrap::after { box-shadow: inset 0 0 18px rgba(70,155,255,.22); }
+.res-slot:nth-child(3) .res-img-wrap::after { box-shadow: inset 0 0 18px rgba(50,215,175,.2); }
+.res-pos {
+  font-size: .56rem; letter-spacing: .22em; text-transform: uppercase;
+  font-weight: 500; color: var(--c-gold);
+}
+.res-name {
+  font-size: .6rem; color: rgba(240,230,208,.58);
+  text-align: center; line-height: 1.35;
+  font-family: 'Noto Serif KR', serif;
+}
+.res-div {
+  width: calc(100% - 36px); height: 1px; flex-shrink: 0;
+  margin: 20px auto 0;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,.38), transparent);
+}
+
+/* interpretation body */
+.res-body { padding: 22px 20px 0; width: 100%; }
+
+@keyframes iReveal { to { opacity:1; transform:translateY(0); } }
+
+/* ════════════════════════════════════════
+   AI READING — dynamic content areas
+════════════════════════════════════════ */
+
+/* Loading dots */
+.ai-loading-wrap {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 16px;
+  padding: 40px 0 28px;
+}
+.ai-dots {
+  display: flex; gap: 9px;
+}
+.ai-dots span {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--c-gold);
+  animation: dotBounce 1.3s ease-in-out infinite;
+}
+.ai-dots span:nth-child(2) { animation-delay: .18s; }
+.ai-dots span:nth-child(3) { animation-delay: .36s; }
+@keyframes dotBounce {
+  0%,80%,100% { transform: translateY(0); opacity: .35; }
+  40%          { transform: translateY(-11px); opacity: 1; }
+}
+.ai-loading-txt {
+  font-family: 'Noto Serif KR', serif;
+  font-size: .8rem; letter-spacing: .16em;
+  color: rgba(240,230,208,.42);
+  animation: txtPulse 2.2s ease-in-out infinite;
+}
+
+/* Main reading card — cream background + dark brown text */
+.ai-reading-card {
+  background: linear-gradient(150deg, #f5edd6 0%, #ede2c8 100%);
+  border-radius: 18px;
+  padding: 22px 20px 24px;
+  margin-bottom: 16px;
+  box-shadow:
+    0 6px 30px rgba(0,0,0,.35),
+    0 1px 0 rgba(255,255,255,.12) inset;
+  opacity: 0; transform: translateY(16px);
+  animation: iReveal .6s ease .08s forwards;
+}
+.ai-reading-label {
+  font-size: .6rem; letter-spacing: .3em; text-transform: uppercase;
+  font-weight: 600; color: #8a6030;
+  margin-bottom: 14px;
+}
+.ai-reading-label::before { content: '— '; opacity: .6; }
+.ai-reading-text {
+  font-family: 'Noto Serif KR', serif;
+  font-size: .92rem; font-weight: 400;
+  line-height: 1.88; letter-spacing: .025em;
+  color: #3a2210;
+  word-break: keep-all;
+}
+.ai-reading-text p + p { margin-top: 14px; }
+
+/* Lucky keuring box — butter yellow */
+.ai-keuring-box {
+  background: linear-gradient(135deg, #ffe95c 0%, #f5d800 100%);
+  border-radius: 18px;
+  padding: 18px 20px;
+  box-shadow:
+    0 4px 20px rgba(195,162,0,.32),
+    0 1px 0 rgba(255,255,255,.5) inset;
+  opacity: 0; transform: translateY(16px);
+  animation: iReveal .6s ease .28s forwards;
+}
+.ai-keuring-text {
+  font-family: 'Noto Serif KR', serif;
+  font-size: .9rem; font-weight: 700;
+  line-height: 1.78; letter-spacing: .02em;
+  color: #3a2810;
+  word-break: keep-all;
+}
+
+/* Error fallback */
+.ai-error-wrap {
+  padding: 28px 8px;
+  text-align: center;
+}
+.ai-error-txt {
+  font-family: 'Noto Serif KR', serif;
+  font-size: .82rem; line-height: 1.72;
+  color: rgba(240,230,208,.38);
+}
+
+/* footer */
+.res-footer {
+  margin: 28px 0 0; padding: 18px;
+  border: 1px solid rgba(201,168,76,.16); border-radius: 14px;
+  background: rgba(201,168,76,.03); text-align: center;
+}
+.res-footer p { font-size: .72rem; color: rgba(240,230,208,.36); line-height: 1.72; }
+.res-footer .brand-sig {
+  display: block; margin-top: 7px;
+  font-family: 'Cinzel Decorative', serif;
+  font-size: .65rem; color: rgba(201,168,76,.4);
+}
+.btn-redo {
+  display: block; margin: 26px auto 0; padding: 12px 36px;
+  border: 1.5px solid rgba(201,168,76,.35); border-radius: 50px;
+  background: transparent; color: var(--c-gold-lt);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: .8rem; letter-spacing: .16em; cursor: pointer;
+  transition: background .28s, box-shadow .28s;
+}
+.btn-redo:active { background: rgba(201,168,76,.08); box-shadow: 0 0 16px rgba(201,168,76,.18); }
+
+/* ════════════════════════════════════════
+   SCROLLBAR
+════════════════════════════════════════ */
+::-webkit-scrollbar { width: 2px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(201,168,76,.25); border-radius: 2px; }
+
+/* ════════════════════════════════════════
+   MISC UTILITY
+════════════════════════════════════════ */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Starfield ── -->
+<canvas id="cv-stars"></canvas>
+
+<!-- ════════════════════════════════════════
+     SCREEN 1 — INTRO
+════════════════════════════════════════ -->
+<div class="screen s-center" id="s1">
+
+  <div class="brand">
+    <div class="brand-name gold-text cinzel">Butter Better</div>
+    <div class="brand-sub">버터베러 타로 리딩</div>
+  </div>
+
+  <div class="i-grid" id="i-grid">
+    <!-- 9 intro cards injected by JS -->
+  </div>
+
+  <div class="i-cta" id="i-cta">
+    <p>당신을 위한 카드가 준비되었어요.<br>세 장을 골라 운명의 흐름을 읽어보세요.</p>
+    <button class="btn-ghost" id="btn-to-sel">
+      <span>✦</span> 카드 고르기
+    </button>
+  </div>
+
+</div><!-- /s1 -->
+
+<!-- ════════════════════════════════════════
+     SCREEN 2 — CARD SELECTION
+════════════════════════════════════════ -->
+<div class="screen is-hidden" id="s2">
+
+  <div class="sel-header">
+    <div class="sel-title gold-text cinzel">Card Selection</div>
+    <div class="sel-desc">배송받으신 키링 카드 3장을 탭해 선택해주세요</div>
+    <div class="sel-tally">
+      <div class="tally-dots">
+        <div class="t-dot" id="td0"></div>
+        <div class="t-dot" id="td1"></div>
+        <div class="t-dot" id="td2"></div>
+      </div>
+      <span id="tally-txt">0 / 3 선택됨</span>
+    </div>
+  </div>
+
+  <div class="sel-grid" id="sel-grid"></div>
+
+  <div class="float-btn-wrap" id="float-wrap">
+    <button class="btn-fate" id="btn-fate">✦ 운명의 흐름 읽기 ✦</button>
+  </div>
+
+</div><!-- /s2 -->
+
+<!-- ════════════════════════════════════════
+     SCREEN 3 — CRYSTAL BALL LOADING
+════════════════════════════════════════ -->
+<div class="screen s-center is-hidden" id="s3">
+
+  <div class="orb-wrap">
+    <div class="o-ring"></div>
+    <div class="o-ring"></div>
+    <div class="o-ring"></div>
+    <div class="orb" id="orb">
+      <div class="orb-hi"></div>
+      <div class="orb-nebula"></div>
+    </div>
+    <div class="orb-particles" id="orb-ptcl"></div>
+    <div class="orb-base"></div>
+  </div>
+
+  <div class="load-txt">운명의 흐름을 읽는 중 …</div>
+
+</div><!-- /s3 -->
+
+<!-- ════════════════════════════════════════
+     SCREEN 4 — RESULT
+════════════════════════════════════════ -->
+<div class="screen is-hidden" id="s4">
+
+  <div class="res-top">
+    <div class="res-title gold-text cinzel">✦ Your Reading ✦</div>
+    <div class="res-date" id="res-date"></div>
+
+    <div class="res-row">
+      <div class="res-slot" id="rs-past">
+        <div class="res-img-wrap"><img id="ri-past" src="" alt=""></div>
+        <div class="res-pos">과거</div>
+        <div class="res-name" id="rn-past"></div>
+      </div>
+      <div class="res-slot" id="rs-pres">
+        <div class="res-img-wrap"><img id="ri-pres" src="" alt=""></div>
+        <div class="res-pos">현재</div>
+        <div class="res-name" id="rn-pres"></div>
+      </div>
+      <div class="res-slot" id="rs-fut">
+        <div class="res-img-wrap"><img id="ri-fut" src="" alt=""></div>
+        <div class="res-pos">미래</div>
+        <div class="res-name" id="rn-fut"></div>
+      </div>
+    </div>
+
+    <div class="res-div"></div>
+  </div>
+
+  <!-- ── scrollable AI reading body ── -->
+  <div class="res-body" id="res-body">
+
+    <!-- loading state (shown while API call is in-flight) -->
+    <div id="ai-loading" class="ai-loading-wrap">
+      <div class="ai-dots"><span></span><span></span><span></span></div>
+      <p class="ai-loading-txt">운명의 흐름을 읽는 중이에요…</p>
+    </div>
+
+    <!-- main reading (cream card, dark brown text) — hidden until API responds -->
+    <div id="ai-main" style="display:none">
+      <div class="ai-reading-card">
+        <div class="ai-reading-label">오늘의 타로 리딩</div>
+        <div class="ai-reading-text" id="ai-main-text"></div>
+      </div>
+    </div>
+
+    <!-- lucky keuring recommendation (butter yellow box) — hidden until API responds -->
+    <div id="ai-keuring" style="display:none">
+      <div class="ai-keuring-box">
+        <div class="ai-keuring-text" id="ai-keuring-text"></div>
+      </div>
+    </div>
+
+  </div><!-- /res-body -->
+
+  <div class="res-footer">
+    <p>이 리딩은 오락 및 영적 탐구를 위한 것으로<br>전문적인 상담을 대체하지 않습니다.</p>
+    <span class="brand-sig">Butter Better · 버터베러</span>
+  </div>
+
+  <button class="btn-redo" id="btn-redo">↺ 처음으로 돌아가기</button>
+
+</div><!-- /s4 -->
+
+<script>
+/* ================================================================
+   ★  CARD DATA
+   실제 이미지가 있으면 img 경로를 교체하세요.
+   예시: img: './images/the-sun.png'
+================================================================ */
+const CARDS = [
+  { id:0,  en:'The Fool',         ko:'광대',        img:'https://placehold.co/200x320/130740/c9a84c?text=Ⅰ' },
+  { id:1,  en:'The Magician',     ko:'마법사',       img:'https://placehold.co/200x320/0c1a42/c9a84c?text=Ⅱ' },
+  { id:2,  en:'High Priestess',   ko:'여교황',       img:'https://placehold.co/200x320/1b0a3c/c9a84c?text=Ⅲ' },
+  { id:3,  en:'The Empress',      ko:'여황제',       img:'https://placehold.co/200x320/081a2e/c9a84c?text=Ⅳ' },
+  { id:4,  en:'The Emperor',      ko:'황제',        img:'https://placehold.co/200x320/190032/c9a84c?text=Ⅴ' },
+  { id:5,  en:'The Hierophant',   ko:'교황',        img:'https://placehold.co/200x320/080b30/c9a84c?text=Ⅵ' },
+  { id:6,  en:'The Lovers',       ko:'연인',        img:'https://placehold.co/200x320/1f0b30/c9a84c?text=Ⅶ' },
+  { id:7,  en:'The Chariot',      ko:'전차',        img:'https://placehold.co/200x320/081920/c9a84c?text=Ⅷ' },
+  { id:8,  en:'Strength',         ko:'힘',         img:'https://placehold.co/200x320/170820/c9a84c?text=Ⅸ' },
+  { id:9,  en:'The Hermit',       ko:'은둔자',       img:'https://placehold.co/200x320/0e1032/c9a84c?text=Ⅹ' },
+  { id:10, en:'Wheel of Fortune', ko:'운명의 바퀴',  img:'https://placehold.co/200x320/060820/c9a84c?text=Ⅺ' },
+  { id:11, en:'Justice',          ko:'정의',        img:'https://placehold.co/200x320/08142a/c9a84c?text=Ⅻ' },
+];
+const BACK = 'https://placehold.co/200x320/09102e/1c1060?text=✦';
+
+/* ================================================================
+   STATE
+================================================================ */
+let chosen = [];
+let readingPromise = null;  // stores the in-flight API promise
+
+/* ================================================================
+   STARS
+================================================================ */
+(function initStars() {
+  const cv = document.getElementById('cv-stars');
+  const cx = cv.getContext('2d');
+  let W, H, stars = [];
+  const resize = () => { W = cv.width = innerWidth; H = cv.height = innerHeight; };
+  resize();
+  addEventListener('resize', resize);
+  for (let i = 0; i < 180; i++) stars.push({
+    x: Math.random() * W, y: Math.random() * H,
+    r: Math.random() * 1.3 + .15,
+    sp: Math.random() * .0038 + .0016,
+    ph: Math.random() * Math.PI * 2,
+  });
+  (function draw(t) {
+    cx.clearRect(0, 0, W, H);
+    stars.forEach(s => {
+      const a = .2 + .8 * Math.abs(Math.sin(t * s.sp + s.ph));
+      cx.beginPath(); cx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      cx.fillStyle = `rgba(255,255,255,${a.toFixed(2)})`; cx.fill();
+    });
+    requestAnimationFrame(draw);
+  })(0);
+})();
+
+/* ================================================================
+   ORB PARTICLES
+================================================================ */
+function buildOrbParticles() {
+  const wrap = document.getElementById('orb-ptcl');
+  wrap.innerHTML = '';
+  const palette = ['#c9a84c','#f0d080','#a855f7','#60b4ff','#4ddbb8','#e0c8ff'];
+  for (let i = 0; i < 11; i++) {
+    const p = document.createElement('div');
+    const r   = 96 + Math.random() * 22;
+    const dur = 2.5 + Math.random() * 2.5;
+    const dly = -(i / 11) * dur;
+    const ang = (i / 11) * 360;
+    const col = palette[i % palette.length];
+    const sz  = 2 + Math.random() * 2.5;
+    const kfName = `ptcl${i}`;
+    const st = document.createElement('style');
+    st.textContent = `@keyframes ${kfName}{
+      from{transform:rotate(${ang}deg) translateX(${r}px) scale(1);}
+      50%{transform:rotate(${ang+180}deg) translateX(${r+6}px) scale(1.4);}
+      to{transform:rotate(${ang+360}deg) translateX(${r}px) scale(1);}
+    }`;
+    document.head.appendChild(st);
+    p.style.cssText = `
+      position:absolute; border-radius:50%;
+      width:${sz}px; height:${sz}px; left:50%; top:50%;
+      margin:-${sz/2}px 0 0 -${sz/2}px;
+      background:${col}; box-shadow:0 0 6px ${col};
+      animation:${kfName} ${dur}s linear ${dly}s infinite;
+    `;
+    wrap.appendChild(p);
+  }
+}
+
+/* ================================================================
+   SCREEN TRANSITION HELPER
+================================================================ */
+function goTo(fromId, toId, onEnter) {
+  const from = document.getElementById(fromId);
+  const to   = document.getElementById(toId);
+
+  from.classList.add('anim-out');
+  from.addEventListener('animationend', () => {
+    from.classList.add('is-hidden');
+    from.classList.remove('anim-out');
+    to.classList.remove('is-hidden');
+    to.classList.add('anim-in');
+    to.addEventListener('animationend', () => to.classList.remove('anim-in'), { once: true });
+    if (onEnter) onEnter();
+  }, { once: true });
+}
+
+/* ================================================================
+   SCREEN 1 — INTRO
+================================================================ */
+function buildIntro() {
+  chosen = [];
+  readingPromise = null;
+  const grid = document.getElementById('i-grid');
+  grid.innerHTML = '';
+  document.getElementById('i-cta').classList.remove('show');
+
+  for (let i = 0; i < 9; i++) {
+    const wrap = document.createElement('div');
+    wrap.className = 'i-card';
+    wrap.innerHTML = `
+      <div class="i-card-inner" id="ic${i}">
+        <div class="i-face i-front">
+          <img src="${BACK}" alt="tarot card">
+        </div>
+        <div class="i-face i-back">
+          <div class="i-back-sym">✦</div>
+        </div>
+      </div>`;
+    grid.appendChild(wrap);
+  }
+
+  for (let i = 0; i < 9; i++) {
+    setTimeout(() => {
+      const inner = document.getElementById(`ic${i}`);
+      inner.classList.add('flip');
+      inner.addEventListener('animationend', () => {
+        inner.classList.remove('flip');
+        inner.classList.add('flipped');
+      }, { once: true });
+    }, i * 210 + 120);
+  }
+
+  setTimeout(() => {
+    document.getElementById('i-cta').classList.add('show');
+  }, 9 * 210 + 900);
+}
+
+document.getElementById('btn-to-sel').addEventListener('click', () => {
+  goTo('s1', 's2', buildSelectionScreen);
+});
+
+/* ================================================================
+   SCREEN 2 — SELECTION
+================================================================ */
+function buildSelectionScreen() {
+  chosen = [];
+  updateTally();
+  document.getElementById('float-wrap').classList.remove('up');
+  document.getElementById('s2').scrollTop = 0;
+
+  const grid = document.getElementById('sel-grid');
+  grid.innerHTML = '';
+
+  CARDS.forEach((card, idx) => {
+    const el = document.createElement('div');
+    el.className = 'sel-card';
+    el.dataset.cid = card.id;
+    el.innerHTML = `
+      <img src="${card.img}" alt="${card.en}" loading="lazy">
+      <div class="s-ring"></div>
+      <div class="sel-card-lbl">
+        ${card.ko}
+        <span>${card.en}</span>
+      </div>`;
+
+    el.addEventListener('click', () => onTap(el, card));
+
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    setTimeout(() => {
+      el.style.transition =
+        'opacity .38s ease, transform .38s ease, border-color .3s ease, box-shadow .3s ease, transform .32s cubic-bezier(.34,1.56,.64,1)';
+      el.style.opacity = '1';
+      el.style.transform = '';
+    }, idx * 52 + 60);
+
+    grid.appendChild(el);
+  });
+}
+
+function onTap(el, card) {
+  const picked = el.classList.contains('chosen');
+  if (picked) {
+    el.classList.remove('chosen');
+    chosen = chosen.filter(c => c.id !== card.id);
+  } else {
+    if (chosen.length >= 3) return;
+    el.classList.add('chosen');
+    chosen.push(card);
+    burst(el);
+  }
+  updateTally();
+  document.getElementById('float-wrap').classList.toggle('up', chosen.length === 3);
+}
+
+function burst(el) {
+  const r = el.getBoundingClientRect();
+  const glyphs = ['✦','✧','⋆','·','✵','✴','＊','꙳'];
+  for (let i = 0; i < 7; i++) {
+    const sp = document.createElement('div');
+    sp.className = 'spark';
+    sp.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
+    sp.style.cssText = `
+      left:${r.left + Math.random() * r.width}px;
+      top:${r.top + Math.random() * r.height * .7}px;
+      color:rgba(201,168,76,${.5 + Math.random() * .5});
+      animation-delay:${Math.random() * .15}s;
+    `;
+    document.body.appendChild(sp);
+    setTimeout(() => sp.remove(), 800);
+  }
+}
+
+function updateTally() {
+  const n = chosen.length;
+  document.getElementById('tally-txt').textContent = `${n} / 3 선택됨`;
+  [0,1,2].forEach(i => document.getElementById(`td${i}`).classList.toggle('on', i < n));
+}
+
+document.getElementById('btn-fate').addEventListener('click', () => {
+  if (chosen.length < 3) return;
+  document.getElementById('float-wrap').classList.remove('up');
+  goTo('s2', 's3', startCrystal);
+});
+
+/* ================================================================
+   API — fetch reading from /api/read
+================================================================ */
+async function fetchReading(past, present, future) {
+  const res = await fetch('/api/read', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ past, present, future }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || `HTTP ${res.status}`);
+  }
+  return res.json(); // { story: "..." }
+}
+
+/* ================================================================
+   RENDER — parse story and display in result screen
+================================================================ */
+function renderReading(story) {
+  // Split on first "✨" — everything before = main reading, rest = keuring
+  const sparkIdx = story.indexOf('✨');
+  const mainText    = (sparkIdx >= 0 ? story.slice(0, sparkIdx) : story).trim();
+  const keuringText = (sparkIdx >= 0 ? story.slice(sparkIdx) : '').trim();
+
+  // Render main reading: split on newlines → <p> tags
+  const mainEl = document.getElementById('ai-main-text');
+  mainEl.innerHTML = mainText
+    .split(/\n+/)
+    .map(line => line.trim())
+    .filter(line => line.length > 0)
+    .map(line => `<p>${line}</p>`)
+    .join('');
+
+  // Render keuring box
+  if (keuringText) {
+    document.getElementById('ai-keuring-text').textContent = keuringText;
+    document.getElementById('ai-keuring').style.display = 'block';
+  }
+
+  // Swap: hide loader, reveal content
+  document.getElementById('ai-loading').style.display = 'none';
+  document.getElementById('ai-main').style.display    = 'block';
+}
+
+function renderReadingError() {
+  document.getElementById('ai-loading').innerHTML = `
+    <div class="ai-error-wrap">
+      <p class="ai-error-txt">리딩을 불러오는 데 실패했어요.<br>잠시 후 다시 시도해 주세요.</p>
+    </div>
+  `;
+}
+
+/* ================================================================
+   SCREEN 3 — CRYSTAL BALL + FLYING CARDS
+================================================================ */
+function startCrystal() {
+  buildOrbParticles();
+
+  const vw = innerWidth, vh = innerHeight;
+  const cx = vw / 2, cy = vh / 2;
+
+  // ── Shuffle positions upfront so we can start the API call immediately ──
+  const shuffled = [...chosen].sort(() => Math.random() - .5);
+  // shuffled[0]=과거, [1]=현재, [2]=미래
+
+  // 🔴 Start API call NOW (runs in parallel with the 4.5s animation)
+  readingPromise = fetchReading(shuffled[0].en, shuffled[1].en, shuffled[2].en);
+
+  // ── Reset result screen reading areas ──────────────────────────
+  document.getElementById('ai-loading').style.display = '';   // flex via CSS
+  document.getElementById('ai-loading').innerHTML = `
+    <div class="ai-dots"><span></span><span></span><span></span></div>
+    <p class="ai-loading-txt">운명의 흐름을 읽는 중이에요…</p>
+  `;
+  document.getElementById('ai-main').style.display    = 'none';
+  document.getElementById('ai-keuring').style.display = 'none';
+
+  // ── Create 3 flying card elements ──────────────────────────────
+  const flyEls = chosen.map((card) => {
+    const el = document.createElement('div');
+    el.className = 'fly-card';
+    el.innerHTML = `<img src="${card.img}" alt="${card.en}">`;
+    el.style.cssText = `
+      left:${cx}px; top:${cy}px;
+      transform:translate(-50%,-50%) scale(.35) rotate(${(Math.random()-.5)*70}deg);
+    `;
+    document.body.appendChild(el);
+    return el;
+  });
+
+  // Phase A — appear
+  setTimeout(() => {
+    flyEls.forEach((el, i) => {
+      el.style.transition = 'all .6s cubic-bezier(.34,1.56,.64,1)';
+      el.style.opacity = '1';
+      el.style.transform = `translate(-50%,-50%) scale(1) rotate(${(i-1)*32}deg)`;
+    });
+  }, 380);
+
+  // Phase B — orbit outward
+  setTimeout(() => {
+    flyEls.forEach((el, i) => {
+      const ang = ((i * 120) - 90) * Math.PI / 180;
+      const r = 62;
+      el.style.transition = 'all .75s ease-in-out';
+      el.style.left  = `${cx + Math.cos(ang) * r}px`;
+      el.style.top   = `${cy + Math.sin(ang) * r}px`;
+      el.style.transform = `translate(-50%,-50%) scale(.88) rotate(${i * 120}deg)`;
+    });
+  }, 1100);
+
+  // Phase C — rush to centre
+  setTimeout(() => {
+    flyEls.forEach((el, i) => {
+      el.style.transition = 'all .65s ease-in-out';
+      el.style.left  = `${cx}px`;
+      el.style.top   = `${cy}px`;
+      el.style.transform = `translate(-50%,-50%) scale(.65) rotate(${i * 240 + 540}deg)`;
+    });
+  }, 2000);
+
+  // Phase D — drop to labelled positions
+  const targets = [
+    { label:'과거',  x: vw * .19, y: vh * .4 },
+    { label:'현재',  x: vw * .50, y: vh * .34 },
+    { label:'미래',  x: vw * .81, y: vh * .4 },
+  ];
+  const labelEls = [];
+
+  shuffled.forEach((card, i) => {
+    setTimeout(() => {
+      const el = flyEls[i];
+      const t  = targets[i];
+      el.style.transition = 'all .46s cubic-bezier(.22,.68,0,1.4)';
+      el.style.left  = `${t.x}px`;
+      el.style.top   = `${t.y}px`;
+      el.style.transform = 'translate(-50%,-50%) scale(1) rotate(0deg)';
+
+      const lbl = document.createElement('div');
+      lbl.className = 'fly-label';
+      lbl.textContent = t.label;
+      lbl.style.cssText = `
+        left:${t.x}px; top:${t.y + 55}px; opacity:0;
+        transition:opacity .38s ease .2s;
+      `;
+      document.body.appendChild(lbl);
+      requestAnimationFrame(() => requestAnimationFrame(() => lbl.style.opacity = '1'));
+      labelEls.push(lbl);
+    }, 2800 + i * 360);
+  });
+
+  // ── Enter result screen, then await API ─────────────────────────
+  setTimeout(async () => {
+    flyEls.forEach(el => el.remove());
+    labelEls.forEach(el => el.remove());
+    prepareResult(shuffled);
+    goTo('s3', 's4');
+
+    // Wait for Gemini (usually already resolved by now)
+    try {
+      const data = await readingPromise;
+      renderReading(data.story);
+    } catch (err) {
+      console.error('Reading API error:', err);
+      renderReadingError();
+    }
+  }, 4500);
+}
+
+/* ================================================================
+   SCREEN 4 — RESULT (cards + date)
+================================================================ */
+function prepareResult(shuffled) {
+  // shuffled[0]=과거, [1]=현재, [2]=미래
+  const slots = [
+    { img: document.getElementById('ri-past'), name: document.getElementById('rn-past'), el: document.getElementById('rs-past') },
+    { img: document.getElementById('ri-pres'), name: document.getElementById('rn-pres'), el: document.getElementById('rs-pres') },
+    { img: document.getElementById('ri-fut'),  name: document.getElementById('rn-fut'),  el: document.getElementById('rs-fut')  },
+  ];
+
+  slots.forEach(s => s.el.classList.remove('show'));
+
+  shuffled.forEach((card, i) => {
+    slots[i].img.src = card.img;
+    slots[i].img.alt = card.en;
+    slots[i].name.textContent = `${card.ko} · ${card.en}`;
+  });
+
+  const now = new Date();
+  document.getElementById('res-date').textContent =
+    now.toLocaleDateString('ko-KR', { year:'numeric', month:'long', day:'numeric', weekday:'long' });
+
+  document.getElementById('s4').scrollTop = 0;
+
+  setTimeout(() => {
+    slots.forEach((s, i) => setTimeout(() => s.el.classList.add('show'), i * 210));
+  }, 200);
+}
+
+document.getElementById('btn-redo').addEventListener('click', () => {
+  ['rs-past','rs-pres','rs-fut'].forEach(id => document.getElementById(id).classList.remove('show'));
+  goTo('s4', 's1', buildIntro);
+});
+
+/* ================================================================
+   BOOT
+================================================================ */
+buildIntro();
+</script>
+</body>
+</html>
