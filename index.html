@@ -535,6 +535,15 @@ html, body {
   position: relative;
 }
 .res-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+.res-img-wrap.reversed img {
+  transform: rotate(180deg);
+}
+.res-orientation {
+  display: block; font-size: .48rem;
+  margin-top: 3px; letter-spacing: .06em;
+}
+.res-orientation.upright  { color: rgba(201,168,76,.72); }
+.res-orientation.reversed { color: rgba(160,110,255,.9); }
 .res-img-wrap::after {
   content: ''; position: absolute; inset: 0; border-radius: 10px;
   pointer-events: none;
@@ -1027,7 +1036,7 @@ function onTap(el, card) {
   } else {
     if (chosen.length >= 3) return;
     el.classList.add('chosen');
-    chosen.push(card);
+    chosen.push({ ...card, isReversed: Math.random() < 0.5 });
     burst(el);
   }
   updateTally();
@@ -1131,7 +1140,8 @@ function startCrystal() {
   // shuffled[0]=과거, [1]=현재, [2]=미래
 
   // 🔴 Start API call NOW (runs in parallel with the 4.5s animation)
-  readingPromise = fetchReading(shuffled[0].en, shuffled[1].en, shuffled[2].en);
+  const cardStr = c => `${c.en} (${c.isReversed ? '역방향' : '정방향'})`;
+  readingPromise = fetchReading(cardStr(shuffled[0]), cardStr(shuffled[1]), cardStr(shuffled[2]));
 
   // ── Reset result screen reading areas ──────────────────────────
   document.getElementById('ai-loading').style.display = '';   // flex via CSS
@@ -1250,7 +1260,10 @@ function prepareResult(shuffled) {
   shuffled.forEach((card, i) => {
     slots[i].img.src = card.img;
     slots[i].img.alt = card.en;
-    slots[i].name.textContent = `${card.ko} · ${card.en}`;
+    slots[i].img.parentElement.classList.toggle('reversed', !!card.isReversed);
+    const dirLabel = card.isReversed ? '↓ 역방향' : '↑ 정방향';
+    const dirClass = card.isReversed ? 'reversed' : 'upright';
+    slots[i].name.innerHTML = `${card.ko} · ${card.en}<br><span class="res-orientation ${dirClass}">${dirLabel}</span>`;
   });
 
   const now = new Date();
