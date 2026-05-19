@@ -110,9 +110,9 @@ html, body {
 
 .i-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(8px, 2.5vw, 13px);
-  width: min(82vw, 310px);
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(6px, 2vw, 10px);
+  width: min(90vw, 340px);
 }
 .i-card {
   aspect-ratio: 2/3;
@@ -844,18 +844,18 @@ html, body {
    예시: img: './images/the-sun.png'
 ================================================================ */
 const CARDS = [
-  { id:0,  en:'The Fool',         ko:'광대',        img:'https://placehold.co/200x320/130740/c9a84c?text=Ⅰ' },
-  { id:1,  en:'The Magician',     ko:'마법사',       img:'https://placehold.co/200x320/0c1a42/c9a84c?text=Ⅱ' },
-  { id:2,  en:'High Priestess',   ko:'여교황',       img:'https://placehold.co/200x320/1b0a3c/c9a84c?text=Ⅲ' },
-  { id:3,  en:'The Empress',      ko:'여황제',       img:'https://placehold.co/200x320/081a2e/c9a84c?text=Ⅳ' },
-  { id:4,  en:'The Emperor',      ko:'황제',        img:'https://placehold.co/200x320/190032/c9a84c?text=Ⅴ' },
-  { id:5,  en:'The Hierophant',   ko:'교황',        img:'https://placehold.co/200x320/080b30/c9a84c?text=Ⅵ' },
-  { id:6,  en:'The Lovers',       ko:'연인',        img:'https://placehold.co/200x320/1f0b30/c9a84c?text=Ⅶ' },
-  { id:7,  en:'The Chariot',      ko:'전차',        img:'https://placehold.co/200x320/081920/c9a84c?text=Ⅷ' },
-  { id:8,  en:'Strength',         ko:'힘',         img:'https://placehold.co/200x320/170820/c9a84c?text=Ⅸ' },
-  { id:9,  en:'The Hermit',       ko:'은둔자',       img:'https://placehold.co/200x320/0e1032/c9a84c?text=Ⅹ' },
-  { id:10, en:'Wheel of Fortune', ko:'운명의 바퀴',  img:'https://placehold.co/200x320/060820/c9a84c?text=Ⅺ' },
-  { id:11, en:'Justice',          ko:'정의',        img:'https://placehold.co/200x320/08142a/c9a84c?text=Ⅻ' },
+  { id:0,  en:'The Sun',      ko:'태양',   img:'https://placehold.co/200x320/1a1200/c9a84c?text=Ⅰ'   },
+  { id:1,  en:'The Moon',     ko:'달',     img:'https://placehold.co/200x320/05081e/c9a84c?text=Ⅱ'   },
+  { id:2,  en:'The Star',     ko:'별',     img:'https://placehold.co/200x320/040c20/c9a84c?text=Ⅲ'   },
+  { id:3,  en:'The Lovers',   ko:'연인',   img:'https://placehold.co/200x320/1f0b30/c9a84c?text=Ⅳ'   },
+  { id:4,  en:'The Magician', ko:'마법사', img:'https://placehold.co/200x320/0c1a42/c9a84c?text=Ⅴ'   },
+  { id:5,  en:'The World',    ko:'세계',   img:'https://placehold.co/200x320/061a10/c9a84c?text=Ⅵ'   },
+  { id:6,  en:'Temperance',   ko:'절제',   img:'https://placehold.co/200x320/0a1828/c9a84c?text=Ⅶ'   },
+  { id:7,  en:'Strength',     ko:'힘',     img:'https://placehold.co/200x320/170820/c9a84c?text=Ⅷ'   },
+  { id:8,  en:'The Chariot',  ko:'전차',   img:'https://placehold.co/200x320/081920/c9a84c?text=Ⅸ'   },
+  { id:9,  en:'Justice',      ko:'정의',   img:'https://placehold.co/200x320/08142a/c9a84c?text=Ⅹ'   },
+  { id:10, en:'The Hermit',   ko:'은둔자', img:'https://placehold.co/200x320/0e1032/c9a84c?text=Ⅺ'   },
+  { id:11, en:'Judgement',    ko:'심판',   img:'https://placehold.co/200x320/1a0808/c9a84c?text=Ⅻ'   },
 ];
 const BACK = 'https://placehold.co/200x320/09102e/1c1060?text=✦';
 
@@ -954,7 +954,7 @@ function buildIntro() {
   grid.innerHTML = '';
   document.getElementById('i-cta').classList.remove('show');
 
-  for (let i = 0; i < 9; i++) {
+  for (let i = 0; i < 12; i++) {
     const wrap = document.createElement('div');
     wrap.className = 'i-card';
     wrap.innerHTML = `
@@ -969,7 +969,7 @@ function buildIntro() {
     grid.appendChild(wrap);
   }
 
-  for (let i = 0; i < 9; i++) {
+  for (let i = 0; i < 12; i++) {
     setTimeout(() => {
       const inner = document.getElementById(`ic${i}`);
       inner.classList.add('flip');
@@ -977,12 +977,12 @@ function buildIntro() {
         inner.classList.remove('flip');
         inner.classList.add('flipped');
       }, { once: true });
-    }, i * 210 + 120);
+    }, i * 180 + 120);
   }
 
   setTimeout(() => {
     document.getElementById('i-cta').classList.add('show');
-  }, 9 * 210 + 900);
+  }, 12 * 180 + 900);
 }
 
 document.getElementById('btn-to-sel').addEventListener('click', () => {
