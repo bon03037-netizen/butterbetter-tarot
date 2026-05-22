@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>버터베러 타로 · Butter Better</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Cinzel+Decorative:wght@400;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Cinzel+Decorative:wght@400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
 <style>
 /* ════════════════════════════════════════
    RESET & CUSTOM PROPERTIES
@@ -34,7 +35,7 @@ html, body {
   width: 100%; height: 100%;
   overflow: hidden;
   background: var(--c-bg);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Gowun Dodum', sans-serif;
   color: var(--c-cream);
   -webkit-tap-highlight-color: transparent;
   user-select: none;
@@ -192,8 +193,8 @@ html, body {
 .btn-ghost {
   display: inline-flex; align-items: center; gap: 9px;
   padding: 13px 32px; border-radius: 50px; border: none;
-  font-family: 'Noto Sans KR', sans-serif;
-  font-size: .84rem; font-weight: 500; letter-spacing: .1em;
+  font-family: 'Gowun Dodum', sans-serif;
+  font-size: .88rem; font-weight: 700; letter-spacing: .1em;
   cursor: pointer; position: relative; overflow: hidden;
   background: linear-gradient(135deg, #160840 0%, #2b0f80 50%, #160840 100%);
   color: var(--c-gold-lt);
@@ -345,8 +346,8 @@ html, body {
 }
 .btn-fate {
   width: 100%; padding: 15px 20px; border: none; border-radius: 50px;
-  font-family: 'Noto Serif KR', serif;
-  font-size: .92rem; font-weight: 600; letter-spacing: .13em;
+  font-family: 'Gowun Dodum', sans-serif;
+  font-size: .95rem; font-weight: 700; letter-spacing: .13em;
   color: #fff; cursor: pointer;
   background: linear-gradient(135deg, #5b14d6, #8f22e8, #5b14d6);
   background-size: 200%;
@@ -648,6 +649,61 @@ html, body {
   word-break: keep-all;
 }
 
+/* Lucky Keyring product section */
+.lucky-keyring-product {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.keyring-product-img {
+  width: 100%;
+  max-width: 180px;
+  aspect-ratio: 1 / 1;   /* 상품 이미지가 정사각형일 때 비율 고정 */
+  object-fit: cover;
+  border-radius: 20px;
+  box-shadow:
+    0 6px 24px rgba(58, 40, 16, 0.28),
+    0 1px 0 rgba(255,255,255,.4) inset;
+  border: 2px solid rgba(201, 148, 30, 0.45);
+  transition: transform .2s ease;
+}
+.keyring-product-img:active { transform: scale(.97); }
+.btn-buy-keyring {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 13px 26px;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #b86c0a 0%, #e09a28 45%, #b86c0a 100%);
+  background-size: 200%;
+  color: #fff9f0;
+  font-family: 'Gowun Dodum', sans-serif;
+  font-size: .88rem;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-decoration: none;
+  box-shadow:
+    0 4px 22px rgba(160, 90, 5, 0.5),
+    0 1px 0 rgba(255,255,255,.22) inset;
+  transition: transform .18s, box-shadow .18s;
+  white-space: nowrap;
+  position: relative; overflow: hidden;
+}
+.btn-buy-keyring::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+  transform: translateX(-100%);
+  animation: sheen 2.4s ease infinite;
+}
+.btn-buy-keyring:active {
+  transform: scale(.96);
+  box-shadow: 0 2px 12px rgba(160, 90, 5, 0.35);
+}
+
 /* Error fallback */
 .ai-error-wrap {
   padding: 28px 8px;
@@ -675,8 +731,8 @@ html, body {
   display: block; margin: 26px auto 0; padding: 12px 36px;
   border: 1.5px solid rgba(201,168,76,.35); border-radius: 50px;
   background: transparent; color: var(--c-gold-lt);
-  font-family: 'Noto Sans KR', sans-serif;
-  font-size: .8rem; letter-spacing: .16em; cursor: pointer;
+  font-family: 'Gowun Dodum', sans-serif;
+  font-size: .82rem; letter-spacing: .16em; cursor: pointer;
   transition: background .28s, box-shadow .28s;
 }
 .btn-redo:active { background: rgba(201,168,76,.08); box-shadow: 0 0 16px rgba(201,168,76,.18); }
@@ -839,25 +895,45 @@ html, body {
 
 <script>
 /* ================================================================
-   ★  CARD DATA
-   실제 이미지가 있으면 img 경로를 교체하세요.
-   예시: img: './images/the-sun.png'
+   ★  CARD DATA  (/images/ 폴더의 로컬 이미지 사용)
+   파일명 규칙: card_{카드영문명_공백→언더바}.png
 ================================================================ */
 const CARDS = [
-  { id:0,  en:'The Sun',      ko:'태양',   img:'https://placehold.co/200x320/1a1200/c9a84c?text=Ⅰ'   },
-  { id:1,  en:'The Moon',     ko:'달',     img:'https://placehold.co/200x320/05081e/c9a84c?text=Ⅱ'   },
-  { id:2,  en:'The Star',     ko:'별',     img:'https://placehold.co/200x320/040c20/c9a84c?text=Ⅲ'   },
-  { id:3,  en:'The Lovers',   ko:'연인',   img:'https://placehold.co/200x320/1f0b30/c9a84c?text=Ⅳ'   },
-  { id:4,  en:'The Magician', ko:'마법사', img:'https://placehold.co/200x320/0c1a42/c9a84c?text=Ⅴ'   },
-  { id:5,  en:'The World',    ko:'세계',   img:'https://placehold.co/200x320/061a10/c9a84c?text=Ⅵ'   },
-  { id:6,  en:'Temperance',   ko:'절제',   img:'https://placehold.co/200x320/0a1828/c9a84c?text=Ⅶ'   },
-  { id:7,  en:'Strength',     ko:'힘',     img:'https://placehold.co/200x320/170820/c9a84c?text=Ⅷ'   },
-  { id:8,  en:'The Chariot',  ko:'전차',   img:'https://placehold.co/200x320/081920/c9a84c?text=Ⅸ'   },
-  { id:9,  en:'Justice',      ko:'정의',   img:'https://placehold.co/200x320/08142a/c9a84c?text=Ⅹ'   },
-  { id:10, en:'The Hermit',   ko:'은둔자', img:'https://placehold.co/200x320/0e1032/c9a84c?text=Ⅺ'   },
-  { id:11, en:'Judgement',    ko:'심판',   img:'https://placehold.co/200x320/1a0808/c9a84c?text=Ⅻ'   },
+  { id:0,  en:'The Sun',      ko:'태양',   img:'/images/card_The_Sun.png'      },
+  { id:1,  en:'The Moon',     ko:'달',     img:'/images/card_The_Moon.png'     },
+  { id:2,  en:'The Star',     ko:'별',     img:'/images/card_The_Star.png'     },
+  { id:3,  en:'The Lovers',   ko:'연인',   img:'/images/card_The_Lovers.png'   },
+  { id:4,  en:'The Magician', ko:'마법사', img:'/images/card_The_Magician.png' },
+  { id:5,  en:'The World',    ko:'세계',   img:'/images/card_The_World.png'    },
+  { id:6,  en:'Temperance',   ko:'절제',   img:'/images/card_Temperance.png'   },
+  { id:7,  en:'Strength',     ko:'힘',     img:'/images/card_Strength.png'     },
+  { id:8,  en:'The Chariot',  ko:'전차',   img:'/images/card_The_Chariot.png'  },
+  { id:9,  en:'Justice',      ko:'정의',   img:'/images/card_Justice.png'      },
+  { id:10, en:'The Hermit',   ko:'은둔자', img:'/images/card_The_Hermit.png'   },
+  { id:11, en:'Judgement',    ko:'심판',   img:'/images/card_Judgement.png'    },
 ];
-const BACK = 'https://placehold.co/200x320/09102e/1c1060?text=✦';
+const BACK = '/images/card_back.png';
+
+/* ================================================================
+   ★  럭키 키링 상품 매핑
+   ※ image: 실제 상품 사진 URL로 교체해 주세요.
+   ※ link:  실제 스마트스토어 상품 페이지 URL로 교체해 주세요.
+================================================================ */
+const keyringProducts = {
+  /* ↓ link는 실제 스마트스토어 상품 페이지 URL로 교체하세요 ↓ */
+  "The Sun":      { image: "/images/keyring_The_Sun.png",      link: "https://smartstore.naver.com/butterbetter/products/sun" },
+  "The Moon":     { image: "/images/keyring_The_Moon.png",     link: "https://smartstore.naver.com/butterbetter/products/moon" },
+  "The Star":     { image: "/images/keyring_The_Star.png",     link: "https://smartstore.naver.com/butterbetter/products/star" },
+  "The Lovers":   { image: "/images/keyring_The_Lovers.png",   link: "https://smartstore.naver.com/butterbetter/products/lovers" },
+  "The Magician": { image: "/images/keyring_The_Magician.png", link: "https://smartstore.naver.com/butterbetter/products/magician" },
+  "The World":    { image: "/images/keyring_The_World.png",    link: "https://smartstore.naver.com/butterbetter/products/world" },
+  "Temperance":   { image: "/images/keyring_Temperance.png",   link: "https://smartstore.naver.com/butterbetter/products/temperance" },
+  "Strength":     { image: "/images/keyring_Strength.png",     link: "https://smartstore.naver.com/butterbetter/products/strength" },
+  "The Chariot":  { image: "/images/keyring_The_Chariot.png",  link: "https://smartstore.naver.com/butterbetter/products/chariot" },
+  "Justice":      { image: "/images/keyring_Justice.png",      link: "https://smartstore.naver.com/butterbetter/products/justice" },
+  "The Hermit":   { image: "/images/keyring_The_Hermit.png",   link: "https://smartstore.naver.com/butterbetter/products/hermit" },
+  "Judgement":    { image: "/images/keyring_Judgement.png",    link: "https://smartstore.naver.com/butterbetter/products/judgement" },
+};
 
 /* ================================================================
    STATE
@@ -1110,6 +1186,25 @@ function renderReading(story) {
   // Render keuring box
   if (keuringText) {
     document.getElementById('ai-keuring-text').textContent = keuringText;
+
+    // 카드 이름 파싱 — keyringProducts의 12개 키 중 텍스트에 포함된 것을 찾음
+    const matchedCard = Object.keys(keyringProducts).find(name => keuringText.includes(name));
+    if (matchedCard) {
+      const product = keyringProducts[matchedCard];
+      const keuringBox = document.querySelector('.ai-keuring-box');
+      // 중복 삽입 방지
+      if (!keuringBox.querySelector('.lucky-keyring-product')) {
+        const productDiv = document.createElement('div');
+        productDiv.className = 'lucky-keyring-product';
+        productDiv.innerHTML = `
+          <img src="${product.image}" alt="${matchedCard} 키링" class="keyring-product-img">
+          <a href="${product.link}" target="_blank" rel="noopener noreferrer" class="btn-buy-keyring">
+            나만의 부적 키링 데려오기
+          </a>`;
+        keuringBox.appendChild(productDiv);
+      }
+    }
+
     document.getElementById('ai-keuring').style.display = 'block';
   }
 
