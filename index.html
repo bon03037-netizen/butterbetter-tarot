@@ -273,7 +273,7 @@ html, body {
   aspect-ratio: 2/3; border-radius: var(--radius-card);
   position: relative; cursor: pointer; overflow: hidden;
   border: 2px solid rgba(255,255,255,.06);
-  background: linear-gradient(155deg, var(--c-navy2), var(--c-purple));
+  background: transparent;
   transition:
     transform .32s cubic-bezier(.34,1.56,.64,1),
     box-shadow .32s ease,
@@ -282,21 +282,23 @@ html, body {
 }
 .sel-card img {
   width: 100%; height: 100%; object-fit: cover;
-  opacity: .8; transition: opacity .3s;
+  opacity: 1; transition: opacity .3s;
   pointer-events: none;
 }
 .sel-card-lbl {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  padding: 22px 5px 7px;
-  background: linear-gradient(to top, rgba(5,9,26,.96), transparent);
+  position: absolute; top: 0; left: 0; right: 0;
+  padding: 7px 5px 22px;
+  background: linear-gradient(to bottom, rgba(5,9,26,.88), transparent);
   text-align: center;
   font-size: .58rem; font-weight: 500; letter-spacing: .04em;
   color: var(--c-cream); line-height: 1.35;
   pointer-events: none;
+  text-shadow: 0 1px 6px rgba(0,0,0,.8);
 }
 .sel-card-lbl span {
   display: block; font-size: .5rem;
-  color: rgba(240,230,208,.4); margin-top: 1px;
+  color: rgba(240,230,208,.7); margin-top: 1px;
+  text-shadow: 0 1px 4px rgba(0,0,0,.9);
 }
 .sel-card.chosen {
   transform: translateY(-7px);
