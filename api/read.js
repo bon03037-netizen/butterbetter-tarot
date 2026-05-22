@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   const { past, present, future } = req.body;
-  const API_KEY = 'AIzaSyCENNASoDGaCtyzN3lX9lGXOlykglhOwJ0';
+  const API_KEY = process.env.GEMINI_API_KEY;
 
   // 1. API 키가 아예 없을 때의 에러
   if (!API_KEY) {
