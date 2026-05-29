@@ -6,7 +6,7 @@
 <title>버터베러 타로 · Butter Better</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Cinzel+Decorative:wght@400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
 <style>
 /* ════════════════════════════════════════
    RESET & CUSTOM PROPERTIES
@@ -35,7 +35,7 @@ html, body {
   width: 100%; height: 100%;
   overflow: hidden;
   background: var(--c-bg);
-  font-family: 'Gowun Dodum', sans-serif;
+  font-family: 'Nanum Myeongjo', serif;
   color: var(--c-cream);
   -webkit-tap-highlight-color: transparent;
   user-select: none;
@@ -84,7 +84,7 @@ html, body {
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   filter: drop-shadow(0 0 10px rgba(201,168,76,0.45));
 }
-.serif { font-family: 'Noto Serif KR', serif; }
+.serif { font-family: 'Nanum Myeongjo', serif; }
 .cinzel { font-family: 'Cinzel Decorative', serif; }
 
 /* ════════════════════════════════════════
@@ -185,7 +185,7 @@ html, body {
 }
 .i-cta.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
 .i-cta p {
-  font-family: 'Noto Serif KR', serif;
+  font-family: 'Nanum Myeongjo', serif;
   font-size: .88rem; font-weight: 300;
   letter-spacing: .09em; line-height: 1.75;
   color: var(--c-mist); margin-bottom: 18px;
@@ -193,7 +193,7 @@ html, body {
 .btn-ghost {
   display: inline-flex; align-items: center; gap: 9px;
   padding: 13px 32px; border-radius: 50px; border: none;
-  font-family: 'Gowun Dodum', sans-serif;
+  font-family: 'Nanum Myeongjo', serif;
   font-size: .88rem; font-weight: 700; letter-spacing: .1em;
   cursor: pointer; position: relative; overflow: hidden;
   background: linear-gradient(135deg, #160840 0%, #2b0f80 50%, #160840 100%);
@@ -348,7 +348,7 @@ html, body {
 }
 .btn-fate {
   width: 100%; padding: 15px 20px; border: none; border-radius: 50px;
-  font-family: 'Gowun Dodum', sans-serif;
+  font-family: 'Nanum Myeongjo', serif;
   font-size: .95rem; font-weight: 700; letter-spacing: .13em;
   color: #fff; cursor: pointer;
   background: linear-gradient(135deg, #5b14d6, #8f22e8, #5b14d6);
@@ -462,7 +462,7 @@ html, body {
 }
 .load-txt {
   margin-top: 52px;
-  font-family: 'Noto Serif KR', serif;
+  font-family: 'Nanum Myeongjo', serif;
   font-size: .83rem; font-weight: 300;
   letter-spacing: .2em; color: rgba(240,230,208,.6);
   animation: txtPulse 2.2s ease-in-out infinite;
@@ -561,7 +561,7 @@ html, body {
 .res-name {
   font-size: .6rem; color: rgba(240,230,208,.58);
   text-align: center; line-height: 1.35;
-  font-family: 'Noto Serif KR', serif;
+  font-family: 'Nanum Myeongjo', serif;
 }
 .res-div {
   width: calc(100% - 36px); height: 1px; flex-shrink: 0;
@@ -599,7 +599,7 @@ html, body {
   40%          { transform: translateY(-11px); opacity: 1; }
 }
 .ai-loading-txt {
-  font-family: 'Noto Serif KR', serif;
+  font-family: 'Nanum Myeongjo', serif;
   font-size: .8rem; letter-spacing: .16em;
   color: rgba(240,230,208,.42);
   animation: txtPulse 2.2s ease-in-out infinite;
@@ -624,7 +624,7 @@ html, body {
 }
 .ai-reading-label::before { content: '— '; opacity: .6; }
 .ai-reading-text {
-  font-family: 'Noto Serif KR', serif;
+  font-family: 'Nanum Myeongjo', serif;
   font-size: .92rem; font-weight: 400;
   line-height: 1.88; letter-spacing: .025em;
   color: #3a2210;
@@ -644,7 +644,7 @@ html, body {
   animation: iReveal .6s ease .28s forwards;
 }
 .ai-keuring-text {
-  font-family: 'Noto Serif KR', serif;
+  font-family: 'Nanum Myeongjo', serif;
   font-size: .9rem; font-weight: 700;
   line-height: 1.78; letter-spacing: .02em;
   color: #3a2810;
@@ -672,6 +672,20 @@ html, body {
   transition: transform .2s ease;
 }
 .keyring-product-img:active { transform: scale(.97); }
+.keyring-secret-msg {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: .82rem;
+  font-weight: 700;
+  line-height: 1.65;
+  color: #2563eb;
+  text-align: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(37, 99, 235, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.22);
+  word-break: keep-all;
+}
+
 .btn-buy-keyring {
   display: inline-flex;
   align-items: center;
@@ -682,7 +696,7 @@ html, body {
   background: linear-gradient(135deg, #b86c0a 0%, #e09a28 45%, #b86c0a 100%);
   background-size: 200%;
   color: #fff9f0;
-  font-family: 'Gowun Dodum', sans-serif;
+  font-family: 'Nanum Myeongjo', serif;
   font-size: .88rem;
   font-weight: 700;
   letter-spacing: .05em;
@@ -712,7 +726,7 @@ html, body {
   text-align: center;
 }
 .ai-error-txt {
-  font-family: 'Noto Serif KR', serif;
+  font-family: 'Nanum Myeongjo', serif;
   font-size: .82rem; line-height: 1.72;
   color: rgba(240,230,208,.38);
 }
@@ -733,7 +747,7 @@ html, body {
   display: block; margin: 26px auto 0; padding: 12px 36px;
   border: 1.5px solid rgba(201,168,76,.35); border-radius: 50px;
   background: transparent; color: var(--c-gold-lt);
-  font-family: 'Gowun Dodum', sans-serif;
+  font-family: 'Nanum Myeongjo', serif;
   font-size: .82rem; letter-spacing: .16em; cursor: pointer;
   transition: background .28s, box-shadow .28s;
 }
@@ -1198,6 +1212,7 @@ function renderReading(story) {
         productDiv.className = 'lucky-keyring-product';
         productDiv.innerHTML = `
           <img src="${product.image}" alt="${matchedCard} 키링" class="keyring-product-img">
+          <p class="keyring-secret-msg">🔮 운명의 흐름을 확인하신 분들께만 드리는 선물! 결제창 배송메시지에 [ex)부적키링-${matchedCard}]이라고 적어주시면, 원하시는 키링을 배송해드려요!</p>
           <a href="${product.link}" target="_blank" rel="noopener noreferrer" class="btn-buy-keyring">
             나만의 부적 키링 데려오기
           </a>`;
