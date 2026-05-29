@@ -1171,30 +1171,28 @@ async function fetchReading(past, present, future) {
    RENDER — parse story and display in result screen
 ================================================================ */
 function renderReading(story) {
-  // Split on first "✨" — everything before = main reading, rest = keuring
-  const sparkIdx = story.indexOf('✨');
-  const mainText    = (sparkIdx >= 0 ? story.slice(0, sparkIdx) : story).trim();
-  const keuringText = (sparkIdx >= 0 ? story.slice(sparkIdx) : '').trim();
+  // ── [버그1 수정] "✨ 지금 당신에게"를 정확한 분리 기준으로 사용
+  //    단순 "✨" 기준이면 본문 장식용 ✨에서 잘릴 수 있음
+  const SPLIT_MARKER = '✨ 지금 당신에게';
+  const splitIdx = story.indexOf(SPLIT_MARKER);
+  const mainText    = (splitIdx >= 0 ? story.slice(0, splitIdx) : story).trim();
+  const keuringText = (splitIdx >= 0 ? story.slice(splitIdx) : '').trim();
 
-  // Render main reading: split on newlines → <p> tags
+  // 메인 리딩: \n → <br> 변환으로 단락 구분 유지
   const mainEl = document.getElementById('ai-main-text');
-  mainEl.innerHTML = mainText
-    .split(/\n+/)
-    .map(line => line.trim())
-    .filter(line => line.length > 0)
-    .map(line => `<p>${line}</p>`)
-    .join('');
+  mainEl.innerHTML = mainText.replace(/\n/g, '<br>');
 
-  // Render keuring box
+  // ── 키링 추천 섹션
   if (keuringText) {
     document.getElementById('ai-keuring-text').textContent = keuringText;
 
-    // 카드 이름 파싱 — keyringProducts의 12개 키 중 텍스트에 포함된 것을 찾음
+    // ── [버그2 수정] keuringText만을 대상으로 카드 이름 매칭
+    //    분리 기준이 정확해졌으므로 keuringText에는 추천 카드만 언급됨
     const matchedCard = Object.keys(keyringProducts).find(name => keuringText.includes(name));
     if (matchedCard) {
       const product = keyringProducts[matchedCard];
       const keuringBox = document.querySelector('.ai-keuring-box');
-      // 중복 삽입 방지
+      // 중복 삽입 방지 (btn-redo로 재시작 후 재호출 시)
       if (!keuringBox.querySelector('.lucky-keyring-product')) {
         const productDiv = document.createElement('div');
         productDiv.className = 'lucky-keyring-product';
@@ -1210,7 +1208,7 @@ function renderReading(story) {
     document.getElementById('ai-keuring').style.display = 'block';
   }
 
-  // Swap: hide loader, reveal content
+  // 로딩 숨기고 콘텐츠 표시
   document.getElementById('ai-loading').style.display = 'none';
   document.getElementById('ai-main').style.display    = 'block';
 }
